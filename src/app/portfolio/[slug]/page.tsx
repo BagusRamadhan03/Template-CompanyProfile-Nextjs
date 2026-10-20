@@ -2,19 +2,16 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { portfolioData } from "@/lib/data/portfolio";
-import { companyData } from "@/lib/data/company";
 import { CtaBanner } from "@/components/CtaBanner";
+import { Reveal } from "@/components/ui/Reveal";
+import { Button } from "@/components/ui/Button";
+import { cn } from "@/lib/utils";
 import {
-  ChevronRight,
-  ArrowRight,
-  TrendingUp,
+  ArrowUpRight,
   Building2,
-  Calendar,
+  ChevronRight,
   Layers,
-  CheckCircle2,
   Quote,
-  Star,
-  Sparkles,
 } from "lucide-react";
 
 interface PageProps {
@@ -22,14 +19,16 @@ interface PageProps {
 }
 
 export async function generateStaticParams() {
-  return portfolioData.map((p) => ({
-    slug: p.slug,
+  return portfolioData.map((project) => ({
+    slug: project.slug,
   }));
 }
 
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: PageProps): Promise<Metadata> {
   const { slug } = await params;
-  const project = portfolioData.find((p) => p.slug === slug);
+  const project = portfolioData.find((item) => item.slug === slug);
 
   if (!project) {
     return {
@@ -49,220 +48,252 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default async function PortfolioDetailPage({ params }: PageProps) {
   const { slug } = await params;
-  const project = portfolioData.find((p) => p.slug === slug);
+  const project = portfolioData.find((item) => item.slug === slug);
 
   if (!project) {
     notFound();
   }
 
   const otherProjects = portfolioData
-    .filter((p) => p.slug !== project.slug)
+    .filter((item) => item.slug !== project.slug)
     .slice(0, 2);
 
+  const monogram = project.clientName
+    .split(" ")
+    .filter((word) => /^[A-Za-z]/.test(word))
+    .slice(0, 2)
+    .map((word) => word[0])
+    .join("")
+    .toUpperCase();
+
   return (
-    <div className="space-y-12 sm:space-y-16 py-8">
-      {/* 1. BREADCRUMB & HEADER */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-xs text-slate-500 mb-6">
-          <Link href="/" className="hover:text-slate-900 transition-colors">
+    <div>
+      {/* 1. HERO */}
+      <section className="mx-auto max-w-7xl px-4 pt-8 sm:px-6 lg:px-8">
+        <nav
+          aria-label="Breadcrumb"
+          className="flex flex-wrap items-center gap-2 font-mono text-[10px] uppercase tracking-[0.18em] text-muted"
+        >
+          <Link href="/" className="transition-colors hover:text-ink">
             Beranda
           </Link>
-          <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
-          <Link href="/portfolio" className="hover:text-slate-900 transition-colors">
+          <ChevronRight className="h-3 w-3 text-line" />
+          <Link href="/portfolio" className="transition-colors hover:text-ink">
             Portofolio
           </Link>
-          <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
-          <span className="text-slate-900 font-medium truncate max-w-xs sm:max-w-sm">
+          <ChevronRight className="h-3 w-3 text-line" />
+          <span className="max-w-xs truncate text-ink sm:max-w-sm">
             {project.title}
           </span>
         </nav>
 
-        {/* Hero Banner */}
         <div
-          className={`rounded-3xl bg-gradient-to-tr ${project.coverGradient} p-8 sm:p-14 text-white shadow-xl relative overflow-hidden`}
+          className={cn(
+            "grain grain-light relative mt-8 overflow-hidden rounded-[2rem] bg-gradient-to-br p-8 text-bone shadow-[0_45px_90px_-55px_rgba(18,18,16,0.6)] sm:p-12 lg:p-16",
+            project.coverGradient
+          )}
         >
-          <div className="absolute top-0 right-0 -mr-16 -mt-16 w-80 h-80 bg-white/10 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute inset-0 bg-blueprint-dark opacity-40" />
+          <div className="absolute -right-20 -top-20 h-72 w-72 rounded-full border border-bone/15" />
+          <span
+            aria-hidden="true"
+            className="pointer-events-none absolute -bottom-14 right-4 select-none font-serif text-[13rem] italic leading-none text-bone/10"
+          >
+            {monogram}
+          </span>
 
-          <div className="max-w-3xl relative z-10">
-            <div className="flex flex-wrap items-center gap-2.5 mb-4">
-              <span className="px-3 py-1 bg-white/20 backdrop-blur-md rounded-full text-xs font-semibold">
+          <div className="relative z-10 max-w-3xl">
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="rounded-full border border-bone/25 bg-bone/10 px-3 py-1 font-mono text-[9px] uppercase tracking-[0.18em] backdrop-blur-sm">
                 {project.category}
               </span>
-              <span className="px-3 py-1 bg-black/20 backdrop-blur-md rounded-full text-xs font-semibold">
-                Tahun {project.year}
+              <span className="rounded-full border border-bone/25 bg-bone/10 px-3 py-1 font-mono text-[9px] uppercase tracking-[0.18em] backdrop-blur-sm">
+                {project.year}
               </span>
             </div>
 
-            <h1 className="text-2xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight leading-tight drop-shadow-sm">
+            <h1 className="mt-6 text-balance text-3xl font-semibold leading-[1.02] tracking-[-0.04em] sm:text-5xl">
               {project.title}
             </h1>
 
-            <p className="mt-4 text-base sm:text-lg text-white/90 leading-relaxed max-w-2xl">
+            <p className="mt-5 max-w-2xl text-pretty text-sm leading-relaxed text-bone/80 sm:text-base">
               {project.shortSummary}
             </p>
 
-            <div className="mt-8 pt-6 border-t border-white/20 flex flex-wrap items-center gap-6 text-xs sm:text-sm">
-              <div className="flex items-center gap-2">
-                <Building2 className="w-4 h-4 text-white/80" />
-                <span>Klien: <strong>{project.clientName}</strong></span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Layers className="w-4 h-4 text-white/80" />
-                <span>Industri: <strong>{project.industry}</strong></span>
-              </div>
+            <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3 border-t border-bone/20 pt-6 font-mono text-[10px] uppercase tracking-[0.18em] text-bone/60">
+              <span className="inline-flex items-center gap-2">
+                <Building2 className="h-3.5 w-3.5" />
+                {project.clientName}
+              </span>
+              <span className="inline-flex items-center gap-2">
+                <Layers className="h-3.5 w-3.5" />
+                {project.industry}
+              </span>
             </div>
           </div>
         </div>
       </section>
 
-      {/* 2. CHALLENGE, SOLUTION & IMPACT */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 sm:gap-12">
-          {/* Main Content (2 cols) */}
-          <div className="lg:col-span-2 space-y-12">
-            {/* The Challenge */}
-            <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-sm">
-              <span className="text-xs font-bold uppercase tracking-wider text-rose-600 bg-rose-50 px-2.5 py-1 rounded-md">
-                Tantangan Klien
-              </span>
-              <h2 className="text-xl sm:text-2xl font-bold text-slate-900 mt-3">
-                Kendala & Permasalahan yang Dihadapi
-              </h2>
-              <p className="mt-4 text-sm sm:text-base text-slate-600 leading-relaxed">
-                {project.challenge}
-              </p>
-            </div>
-
-            {/* The Solution */}
-            <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-sm">
-              <span className="text-xs font-bold uppercase tracking-wider text-blue-600 bg-blue-50 px-2.5 py-1 rounded-md">
-                Solusi dari Kami
-              </span>
-              <h2 className="text-xl sm:text-2xl font-bold text-slate-900 mt-3">
-                Pendekatan Teknis & Arsitektur yang Dibangun
-              </h2>
-              <p className="mt-4 text-sm sm:text-base text-slate-600 leading-relaxed">
-                {project.solution}
-              </p>
-            </div>
-
-            {/* Measurable Results */}
-            <div>
-              <h2 className="text-xl sm:text-2xl font-bold text-slate-900 mb-6 flex items-center gap-2">
-                <TrendingUp className="w-6 h-6 text-emerald-600" />
-                <span>Dampak Bisnis & Hasil Terukur</span>
-              </h2>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {project.results.map((res, i) => (
-                  <div
-                    key={i}
-                    className="p-5 rounded-2xl bg-white border border-slate-200/80 shadow-sm flex flex-col justify-between"
-                  >
-                    <div>
-                      <span className="text-2xl sm:text-3xl font-extrabold text-blue-600">
-                        {res.value}
-                      </span>
-                      <h4 className="font-bold text-slate-900 text-sm mt-1">
-                        {res.label}
-                      </h4>
-                    </div>
-                    <p className="mt-2 text-xs text-slate-500 leading-relaxed">
-                      {res.description}
-                    </p>
-                  </div>
-                ))}
+      {/* 2. CONTENT */}
+      <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
+        <div className="grid gap-14 lg:grid-cols-12 lg:gap-10">
+          <div className="space-y-14 lg:col-span-8">
+            <Reveal>
+              <div className="grid gap-5 sm:grid-cols-2">
+                <div className="rounded-2xl border border-line bg-cream p-7">
+                  <span className="font-mono text-[10px] uppercase tracking-[0.22em] text-ember-ink">
+                    01 — Tantangan
+                  </span>
+                  <h2 className="mt-4 text-lg font-semibold text-ink">
+                    Kendala yang dihadapi klien
+                  </h2>
+                  <p className="mt-3 text-sm leading-relaxed text-muted">
+                    {project.challenge}
+                  </p>
+                </div>
+                <div className="rounded-2xl border border-line bg-cream p-7">
+                  <span className="font-mono text-[10px] uppercase tracking-[0.22em] text-ember-ink">
+                    02 — Solusi
+                  </span>
+                  <h2 className="mt-4 text-lg font-semibold text-ink">
+                    Pendekatan teknis yang dibangun
+                  </h2>
+                  <p className="mt-3 text-sm leading-relaxed text-muted">
+                    {project.solution}
+                  </p>
+                </div>
               </div>
-            </div>
+            </Reveal>
 
-            {/* Client Testimonial if available */}
-            {project.clientQuote && (
-              <div className="p-6 sm:p-8 rounded-3xl bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-100">
-                <div className="flex items-center gap-1 text-amber-400 mb-3">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="w-4 h-4 fill-amber-400" />
+            <Reveal>
+              <div>
+                <div className="mb-7 flex items-center gap-4">
+                  <span className="font-mono text-[10px] text-ember-ink">
+                    03
+                  </span>
+                  <h2 className="text-xl font-semibold tracking-tight text-ink sm:text-2xl">
+                    Dampak bisnis & hasil terukur
+                  </h2>
+                  <span className="h-px flex-1 bg-line" />
+                </div>
+
+                <div className="grid gap-px overflow-hidden rounded-2xl border border-line bg-line sm:grid-cols-2">
+                  {project.results.map((result) => (
+                    <div key={result.label} className="bg-cream p-7">
+                      <p className="font-serif text-4xl italic leading-none text-ember-ink">
+                        {result.value}
+                      </p>
+                      <p className="mt-4 text-sm font-semibold text-ink">
+                        {result.label}
+                      </p>
+                      <p className="mt-1.5 text-xs leading-relaxed text-muted">
+                        {result.description}
+                      </p>
+                    </div>
                   ))}
                 </div>
-                <p className="text-sm sm:text-base text-slate-700 italic leading-relaxed">
-                  &ldquo;{project.clientQuote.quote}&rdquo;
-                </p>
-                <div className="mt-4 pt-4 border-t border-blue-200/60">
-                  <p className="font-bold text-sm text-slate-900">
-                    {project.clientQuote.author}
-                  </p>
-                  <p className="text-xs text-slate-500">
-                    {project.clientQuote.role}
-                  </p>
-                </div>
               </div>
+            </Reveal>
+
+            {project.clientQuote && (
+              <Reveal>
+                <figure className="grain grain-light relative overflow-hidden rounded-2xl bg-ink p-8 text-bone sm:p-10">
+                  <div className="absolute -right-16 -top-16 h-52 w-52 rounded-full border border-bone/10" />
+                  <Quote className="relative z-10 h-8 w-8 text-ember" />
+                  <blockquote className="relative z-10 mt-6 font-serif text-2xl italic leading-snug">
+                    “{project.clientQuote.quote}”
+                  </blockquote>
+                  <figcaption className="relative z-10 mt-6 border-t border-bone/10 pt-5">
+                    <p className="text-sm font-semibold">
+                      {project.clientQuote.author}
+                    </p>
+                    <p className="mt-0.5 text-xs text-bone/45">
+                      {project.clientQuote.role}
+                    </p>
+                  </figcaption>
+                </figure>
+              </Reveal>
             )}
           </div>
 
           {/* Sidebar */}
-          <div className="space-y-6">
-            {/* Tech Stack Card */}
-            <div className="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-sm">
-              <h3 className="text-base font-bold text-slate-900 mb-4">
-                Teknologi yang Digunakan
-              </h3>
-              <div className="flex flex-wrap gap-2">
-                {project.techStack.map((tech) => (
-                  <span
-                    key={tech}
-                    className="text-xs font-semibold bg-slate-100 text-slate-700 px-3 py-1 rounded-lg"
-                  >
-                    {tech}
-                  </span>
-                ))}
+          <aside className="lg:col-span-4">
+            <div className="lg:sticky lg:top-32 lg:space-y-5">
+              <div className="rounded-2xl border border-line bg-cream p-7">
+                <p className="font-mono text-[10px] uppercase tracking-[0.24em] text-muted">
+                  Teknologi
+                </p>
+                <div className="mt-5 flex flex-wrap gap-1.5">
+                  {project.techStack.map((tech) => (
+                    <span
+                      key={tech}
+                      className="rounded-md border border-line bg-bone/60 px-2.5 py-1.5 text-[11px] font-medium text-ink/70"
+                    >
+                      {tech}
+                    </span>
+                  ))}
+                </div>
               </div>
-            </div>
 
-            {/* Consultation Card */}
-            <div className="bg-slate-900 text-white rounded-2xl p-6 shadow-md">
-              <h3 className="text-lg font-bold">Tertarik dengan Hasil Ini?</h3>
-              <p className="mt-2 text-xs text-slate-300 leading-relaxed">
-                Kami dapat mengimplementasikan solusi yang disesuaikan dengan skala dan model bisnis Anda.
-              </p>
-              <div className="mt-6">
-                <Link
+              <div className="grain grain-light relative overflow-hidden rounded-2xl bg-ink p-7 text-bone">
+                <div className="absolute -right-12 -top-12 h-36 w-36 rounded-full border border-bone/10" />
+                <p className="relative z-10 font-serif text-2xl italic leading-snug">
+                  Tertarik dengan hasil ini?
+                </p>
+                <p className="relative z-10 mt-3 text-xs leading-relaxed text-bone/50">
+                  Kami dapat mengimplementasikan solusi yang disesuaikan dengan
+                  skala dan model bisnis Anda.
+                </p>
+                <Button
                   href="/contact"
-                  className="w-full inline-flex items-center justify-center py-2.5 px-4 rounded-xl text-xs sm:text-sm font-semibold text-slate-900 bg-white hover:bg-slate-100 transition-colors"
+                  variant="light"
+                  arrow
+                  className="relative z-10 mt-6 w-full"
                 >
-                  Jadwalkan Konsultasi Teknis
-                </Link>
+                  Jadwalkan konsultasi
+                </Button>
               </div>
-            </div>
 
-            {/* Other Projects */}
-            <div className="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-sm">
-              <h3 className="text-base font-bold text-slate-900 mb-3">
-                Studi Kasus Lainnya
-              </h3>
-              <ul className="space-y-3">
-                {otherProjects.map((p) => (
-                  <li key={p.id}>
+              <div className="rounded-2xl border border-line bg-cream p-7">
+                <p className="font-mono text-[10px] uppercase tracking-[0.24em] text-muted">
+                  Studi kasus lainnya
+                </p>
+                <div className="mt-4 space-y-4">
+                  {otherProjects.map((other) => (
                     <Link
-                      href={`/portfolio/${p.slug}`}
+                      key={other.id}
+                      href={`/portfolio/${other.slug}`}
                       className="group block"
                     >
-                      <p className="text-xs font-semibold text-slate-500 uppercase">
-                        {p.clientName}
-                      </p>
-                      <h4 className="text-sm font-bold text-slate-800 group-hover:text-blue-600 transition-colors line-clamp-2">
-                        {p.title}
-                      </h4>
+                      <div
+                        className={cn(
+                          "grain grain-light relative overflow-hidden rounded-xl bg-gradient-to-br p-4",
+                          other.coverGradient
+                        )}
+                      >
+                        <div className="absolute inset-0 bg-blueprint-dark opacity-40" />
+                        <span className="relative z-10 font-mono text-[9px] uppercase tracking-[0.16em] text-bone/60">
+                          {other.clientName}
+                        </span>
+                        <h3 className="relative z-10 mt-2 line-clamp-2 text-sm font-semibold text-bone">
+                          {other.title}
+                        </h3>
+                        <span className="absolute right-3 top-3 z-10 inline-flex h-7 w-7 items-center justify-center rounded-full border border-bone/25 text-bone transition-all duration-300 group-hover:border-ember group-hover:bg-ember group-hover:text-ink">
+                          <ArrowUpRight className="h-3.5 w-3.5" />
+                        </span>
+                      </div>
                     </Link>
-                  </li>
-                ))}
-              </ul>
+                  ))}
+                </div>
+              </div>
             </div>
-          </div>
+          </aside>
         </div>
       </section>
 
-      {/* 3. CTA BANNER */}
+      {/* 3. CTA */}
       <CtaBanner
-        title="Wujudkan Transformasi Digital Serupa untuk Perusahaan Anda"
+        title="Wujudkan transformasi digital serupa untuk perusahaan Anda"
         description="Diskusikan kebutuhan proyek Anda langsung bersama tim arsitek teknologi Nusantara Tekno Solusi."
       />
     </div>

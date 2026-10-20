@@ -1,9 +1,13 @@
+import type { ReactNode } from "react";
+import { cn } from "@/lib/utils";
+
 interface SectionHeadingProps {
   badge?: string;
-  title: string;
+  title: ReactNode;
   subtitle?: string;
   centered?: boolean;
   dark?: boolean;
+  index?: string;
   className?: string;
 }
 
@@ -13,36 +17,67 @@ export function SectionHeading({
   subtitle,
   centered = true,
   dark = false,
-  className = "",
+  index,
+  className,
 }: SectionHeadingProps) {
   return (
     <div
-      className={`max-w-3xl ${centered ? "mx-auto text-center" : "text-left"} ${className}`}
-    >
-      {badge && (
-        <span
-          className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold tracking-wide uppercase mb-4 ${
-            dark
-              ? "bg-blue-900/60 text-blue-300 border border-blue-700/50"
-              : "bg-blue-50 text-blue-700 border border-blue-100"
-          }`}
-        >
-          <span className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse" />
-          {badge}
-        </span>
+      className={cn(
+        "max-w-3xl",
+        centered && "mx-auto text-center",
+        className
       )}
+    >
+      {(badge || index) && (
+        <div
+          className={cn(
+            "mb-5 flex items-center gap-3",
+            centered && "justify-center"
+          )}
+        >
+          {index && (
+            <span
+              className={cn(
+                "font-mono text-[10px] font-semibold tracking-[0.2em]",
+                dark ? "text-ember" : "text-ember-ink"
+              )}
+            >
+              {index}
+            </span>
+          )}
+          {badge && (
+            <span
+              className={cn(
+                "font-mono text-[10px] font-semibold uppercase tracking-[0.24em]",
+                dark ? "text-bone/40" : "text-muted"
+              )}
+            >
+              {badge}
+            </span>
+          )}
+          <span
+            className={cn("h-px w-8", dark ? "bg-bone/20" : "bg-line")}
+            aria-hidden="true"
+          />
+        </div>
+      )}
+
       <h2
-        className={`text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight leading-tight ${
-          dark ? "text-white" : "text-slate-900"
-        }`}
+        className={cn(
+          "text-balance text-3xl font-semibold leading-[1.05] tracking-[-0.035em] sm:text-4xl lg:text-[2.85rem]",
+          dark ? "text-bone" : "text-ink"
+        )}
       >
         {title}
       </h2>
+
       {subtitle && (
         <p
-          className={`mt-4 text-base sm:text-lg leading-relaxed ${
-            dark ? "text-slate-400" : "text-slate-600"
-          }`}
+          className={cn(
+            "mt-5 max-w-2xl text-pretty text-sm leading-relaxed sm:text-base",
+            centered && "mx-auto",
+            dark ? "text-bone/45" : "text-muted"
+          )}
         >
           {subtitle}
         </p>

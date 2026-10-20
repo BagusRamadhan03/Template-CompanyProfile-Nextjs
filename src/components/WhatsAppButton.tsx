@@ -1,6 +1,5 @@
 "use client";
 
-import { MessageCircle } from "lucide-react";
 import { companyData } from "@/lib/data/company";
 
 export function WhatsAppButton() {
@@ -10,27 +9,21 @@ export function WhatsAppButton() {
 
   return (
     <aside
-      aria-label="Kontak Cepat WhatsApp"
-      className="fixed bottom-6 right-6 z-40 flex items-center group"
+      aria-label="Kontak cepat WhatsApp"
+      className="fixed bottom-5 right-5 z-40 sm:bottom-6 sm:right-6"
     >
-      {/* Tooltip on hover */}
-      <span className="hidden sm:inline-block mr-3 px-3 py-1.5 bg-slate-900 text-white text-xs font-medium rounded-lg shadow-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none duration-200">
-        Chat Tim Kami via WhatsApp
-      </span>
-
       <a
         href={waUrl}
         target="_blank"
         rel="noopener noreferrer"
-        className="relative flex items-center justify-center w-14 h-14 bg-emerald-500 hover:bg-emerald-600 text-white rounded-full shadow-lg shadow-emerald-500/30 hover:scale-110 active:scale-95 transition-all focus:outline-none focus:ring-4 focus:ring-emerald-300"
         aria-label="Chat via WhatsApp"
+        className="group relative inline-flex h-12 items-center gap-2.5 rounded-full border border-ink/10 bg-ink pl-4 pr-4 text-sm font-semibold text-bone shadow-[0_18px_45px_-20px_rgba(18,18,16,0.85)] transition-all duration-300 hover:bg-ember hover:text-ink sm:pr-5"
       >
-        {/* Pulse indicator badge */}
-        <span className="absolute -top-1 -right-1 flex h-3.5 w-3.5">
-          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-300 opacity-75"></span>
-          <span className="relative inline-flex rounded-full h-3.5 w-3.5 bg-emerald-400 border-2 border-white"></span>
+        <span className="relative flex h-2.5 w-2.5 items-center justify-center">
+          <span className="absolute h-2.5 w-2.5 animate-ping rounded-full bg-emerald-400 opacity-75" />
+          <span className="h-2.5 w-2.5 rounded-full bg-emerald-400 ring-2 ring-ink/20 transition-colors group-hover:ring-ink/10" />
         </span>
-        <MessageCircle className="w-7 h-7 fill-white" />
+        <span>WhatsApp</span>
       </a>
     </aside>
   );

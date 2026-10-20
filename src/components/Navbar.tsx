@@ -1,11 +1,14 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { ArrowUpRight, Menu, X } from "lucide-react";
 import { companyData } from "@/lib/data/company";
 import { mainNavItems } from "@/lib/data/navigation";
-import { Menu, X, ArrowRight, Sparkles } from "lucide-react";
+import { Logo } from "@/components/Logo";
+import { Button } from "@/components/ui/Button";
+import { cn } from "@/lib/utils";
 
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -13,128 +16,157 @@ export function Navbar() {
   const pathname = usePathname();
 
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
-    };
-    window.addEventListener("scroll", handleScroll);
+    const handleScroll = () => setScrolled(window.scrollY > 24);
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Close mobile menu on route change
   useEffect(() => {
-    setIsOpen(false);
-  }, [pathname]);
+    document.body.style.overflow = isOpen ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isOpen]);
+
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setIsOpen(false);
+    };
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [isOpen]);
+
+  const isItemActive = (href: string) =>
+    href === "/" ? pathname === "/" : pathname.startsWith(href);
 
   return (
-    <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled
-          ? "bg-white/95 backdrop-blur-md shadow-sm border-b border-slate-200/80 py-3.5"
-          : "bg-white/80 backdrop-blur-sm border-b border-slate-100 py-5"
-      }`}
-    >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between">
-          {/* Brand Logo */}
-          <Link
-            href="/"
-            className="flex items-center gap-2.5 group focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 rounded-lg"
+    <header className="sticky top-0 z-50 px-3 pt-3 sm:px-5 sm:pt-4">
+      <div
+        className={cn(
+          "relative z-50 mx-auto flex max-w-7xl items-center justify-between gap-4 rounded-full border px-3 py-2.5 transition-all duration-500 sm:px-4",
+          scrolled
+            ? "border-line bg-cream/90 shadow-[0_20px_60px_-40px_rgba(18,18,16,0.6)] backdrop-blur-xl"
+            : "border-transparent bg-bone/45 backdrop-blur-md"
+        )}
+      >
+        <Logo />
+
+        <nav
+          aria-label="Navigasi utama"
+          className="hidden items-center gap-0.5 md:flex"
+        >
+          {mainNavItems.map((item) => {
+            const isActive = isItemActive(item.href);
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                aria-current={isActive ? "page" : undefined}
+                className={cn(
+                  "group relative rounded-full px-4 py-2 text-sm font-medium transition-colors duration-300",
+                  isActive ? "text-ink" : "text-muted hover:text-ink"
+                )}
+              >
+                {item.title}
+                <span
+                  className={cn(
+                    "absolute inset-x-4 bottom-0.5 h-px origin-left scale-x-0 bg-ember transition-transform duration-300 group-hover:scale-x-100",
+                    isActive && "scale-x-100"
+                  )}
+                />
+              </Link>
+            );
+          })}
+        </nav>
+
+        <div className="flex items-center gap-2">
+          <Button href="/contact" arrow className="hidden sm:inline-flex">
+            Mulai proyek
+          </Button>
+
+          <button
+            type="button"
+            onClick={() => setIsOpen((open) => !open)}
+            className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-ink/15 text-ink transition-colors hover:border-ink hover:bg-ink hover:text-bone md:hidden"
+            aria-label={isOpen ? "Tutup menu navigasi" : "Buka menu navigasi"}
+            aria-expanded={isOpen}
+            aria-controls="mobile-menu"
           >
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 via-indigo-600 to-cyan-500 flex items-center justify-center text-white shadow-md shadow-blue-500/25 group-hover:scale-105 transition-transform">
-              <Sparkles className="w-5 h-5" />
-            </div>
-            <div className="flex flex-col">
-              <span className="font-bold text-lg text-slate-900 leading-tight tracking-tight group-hover:text-blue-600 transition-colors">
-                {companyData.shortName}
-              </span>
-              <span className="text-xs text-slate-500 font-medium tracking-wide">
-                Solusi Digital & Rekayasa
-              </span>
-            </div>
-          </Link>
-
-          {/* Desktop Navigation Links */}
-          <nav className="hidden md:flex items-center gap-1.5 lg:gap-2">
-            {mainNavItems.map((item) => {
-              const isActive =
-                item.href === "/"
-                  ? pathname === "/"
-                  : pathname.startsWith(item.href);
-
-              return (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className={`px-3.5 py-2 text-sm font-medium rounded-lg transition-all ${
-                    isActive
-                      ? "text-blue-600 bg-blue-50/80 font-semibold"
-                      : "text-slate-600 hover:text-slate-900 hover:bg-slate-100/70"
-                  }`}
-                >
-                  {item.title}
-                </Link>
-              );
-            })}
-          </nav>
-
-          {/* CTA & Mobile Hamburger */}
-          <div className="flex items-center gap-3">
-            <Link
-              href="/contact"
-              className="hidden sm:inline-flex items-center gap-2 px-4 py-2.5 text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-xl shadow-sm hover:shadow-md hover:shadow-blue-500/20 transition-all active:scale-95"
-            >
-              <span>Konsultasi Gratis</span>
-              <ArrowRight className="w-4 h-4" />
-            </Link>
-
-            {/* Mobile Hamburger Button */}
-            <button
-              type="button"
-              onClick={() => setIsOpen(!isOpen)}
-              className="md:hidden p-2 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500"
-              aria-label={isOpen ? "Tutup menu navigasi" : "Buka menu navigasi"}
-              aria-expanded={isOpen}
-            >
-              {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-            </button>
-          </div>
+            {isOpen ? (
+              <X className="h-5 w-5" />
+            ) : (
+              <Menu className="h-5 w-5" />
+            )}
+          </button>
         </div>
       </div>
 
-      {/* Mobile Dropdown Menu */}
       {isOpen && (
-        <div className="md:hidden bg-white/95 backdrop-blur-lg border-b border-slate-200 px-4 pt-3 pb-6 space-y-2 shadow-xl animate-in slide-in-from-top-2 duration-200">
-          <div className="flex flex-col space-y-1">
-            {mainNavItems.map((item) => {
-              const isActive =
-                item.href === "/"
-                  ? pathname === "/"
-                  : pathname.startsWith(item.href);
+        <div id="mobile-menu" className="fixed inset-0 z-40 md:hidden">
+          <div
+            className="absolute inset-0 bg-bone/95 backdrop-blur-2xl"
+            onClick={() => setIsOpen(false)}
+            aria-hidden="true"
+          />
 
-              return (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className={`px-4 py-3 rounded-xl text-base font-medium transition-colors ${
-                    isActive
-                      ? "bg-blue-50 text-blue-600 font-semibold"
-                      : "text-slate-700 hover:bg-slate-50 hover:text-slate-900"
-                  }`}
+          <div className="relative flex h-full flex-col justify-between overflow-y-auto px-6 pb-10 pt-28">
+            <nav aria-label="Navigasi mobile" className="flex flex-col">
+              {mainNavItems.map((item, index) => {
+                const isActive = isItemActive(item.href);
+                return (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    onClick={() => setIsOpen(false)}
+                    className={cn(
+                      "group flex animate-rise items-center justify-between border-b border-line py-5 text-2xl font-semibold tracking-tight",
+                      isActive ? "text-ember-ink" : "text-ink"
+                    )}
+                    style={{ animationDelay: `${index * 55}ms` }}
+                  >
+                    <span className="flex items-baseline gap-4">
+                      <span className="font-mono text-[10px] font-medium text-muted">
+                        0{index + 1}
+                      </span>
+                      {item.title}
+                    </span>
+                    <ArrowUpRight className="h-5 w-5 text-muted transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-ember-ink" />
+                  </Link>
+                );
+              })}
+            </nav>
+
+            <div className="mt-10 animate-rise space-y-5 [animation-delay:280ms]">
+              <p className="font-mono text-[10px] uppercase tracking-[0.24em] text-muted">
+                Hubungi kami
+              </p>
+              <div className="space-y-1.5">
+                <a
+                  href={`mailto:${companyData.contact.email}`}
+                  className="block text-lg font-medium text-ink transition-colors hover:text-ember-ink"
                 >
-                  {item.title}
-                </Link>
-              );
-            })}
-          </div>
-
-          <div className="pt-4 border-t border-slate-100">
-            <Link
-              href="/contact"
-              className="flex items-center justify-center gap-2 w-full px-4 py-3 rounded-xl text-center font-semibold text-white bg-blue-600 hover:bg-blue-700 shadow-md shadow-blue-500/25"
-            >
-              <span>Hubungi Tim Kami</span>
-              <ArrowRight className="w-4 h-4" />
-            </Link>
+                  {companyData.contact.email}
+                </a>
+                <a
+                  href={`tel:${companyData.contact.phone}`}
+                  className="block text-sm text-muted transition-colors hover:text-ink"
+                >
+                  {companyData.contact.phone}
+                </a>
+              </div>
+              <Button
+                href="/contact"
+                variant="primary"
+                size="lg"
+                arrow
+                onClick={() => setIsOpen(false)}
+                className="w-full"
+              >
+                Jadwalkan konsultasi
+              </Button>
+            </div>
           </div>
         </div>
       )}

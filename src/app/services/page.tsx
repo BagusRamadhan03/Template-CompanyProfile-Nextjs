@@ -1,18 +1,16 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { servicesData } from "@/lib/data/services";
 import { ServiceCard } from "@/components/ServiceCard";
 import { SectionHeading } from "@/components/SectionHeading";
 import { CtaBanner } from "@/components/CtaBanner";
+import { Reveal } from "@/components/ui/Reveal";
+import { Button } from "@/components/ui/Button";
 import {
+  ArrowUpRight,
   Code2,
-  Cpu,
   Layers,
-  Sparkles,
-  CheckCircle2,
-  Workflow,
-  Clock,
   ShieldCheck,
+  Workflow,
 } from "lucide-react";
 
 export const metadata: Metadata = {
@@ -21,131 +19,228 @@ export const metadata: Metadata = {
     "Katalog lengkap layanan rekayasa software enterprise, aplikasi mobile iOS & Android, arsitektur cloud, data warehouse, dan audit keamanan sistem.",
 };
 
+const processSteps = [
+  {
+    icon: Layers,
+    step: "Tahap 1",
+    title: "Analisis Arsitektur",
+    desc: "Identifikasi kebutuhan fungsional & non-fungsional, pemodelan data, dan pemilihan stack teknologi yang tepat.",
+  },
+  {
+    icon: Code2,
+    step: "Tahap 2",
+    title: "Sprint Pengembangan",
+    desc: "Iterasi dua mingguan menggunakan clean architecture, code review berlapis, dan branch protection.",
+  },
+  {
+    icon: ShieldCheck,
+    step: "Tahap 3",
+    title: "QA & Security Audit",
+    desc: "Penetrasi testing, automated regression test, load testing 10.000+ virtual users, dan audit celah keamanan.",
+  },
+  {
+    icon: Workflow,
+    step: "Tahap 4",
+    title: "Rilis & Operasional",
+    desc: "Penerapan CI/CD zero-downtime, setup dashboard pemantauan, dan SLA dukungan 24/7 purna-jual.",
+  },
+];
+
+const differentiators = [
+  {
+    title: "100% hak milik kode",
+    desc: "Repositori dan hak cipta diserahkan penuh kepada klien setelah proyek selesai.",
+  },
+  {
+    title: "Skalabilitas teruji",
+    desc: "Arsitektur dirancang siap menangani lonjakan jutaan request tanpa degradasi performa.",
+  },
+  {
+    title: "Dokumentasi terstruktur",
+    desc: "OpenAPI/Swagger spec, arsitektur wiki, dan SOP operasional yang rapi.",
+  },
+  {
+    title: "Garansi pasca-peluncuran",
+    desc: "Perbaikan bug tanpa biaya tambahan selama masa garansi berlangsung.",
+  },
+];
+
 export default function ServicesPage() {
   return (
-    <div className="space-y-16 sm:space-y-24 py-8">
-      {/* 1. HERO SERVICES */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="max-w-3xl mx-auto text-center">
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider bg-blue-50 text-blue-700 border border-blue-100 mb-4">
-            Kapabilitas Teknis
-          </span>
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 tracking-tight leading-tight">
-            Layanan Rekayasa Digital Komprehensif Berstandar Enterprise
-          </h1>
-          <p className="mt-6 text-base sm:text-lg text-slate-600 leading-relaxed">
-            Kami menghadirkan spektrum keahlian teknologi menyeluruh, dari tahap konseptualisasi sistem hingga deployment berskala jutaan pengguna.
-          </p>
+    <div>
+      {/* 1. HERO */}
+      <section className="relative overflow-hidden">
+        <div className="pointer-events-none absolute -left-40 top-10 h-96 w-96 rounded-full bg-ember/10 blur-3xl" />
+
+        <div className="relative mx-auto max-w-7xl px-4 pb-16 pt-10 sm:px-6 sm:pt-16 lg:px-8">
+          <div className="grid gap-12 lg:grid-cols-12">
+            <div className="lg:col-span-7">
+              <p className="eyebrow text-muted">
+                <span className="h-px w-8 bg-ember" />
+                Layanan — 01
+              </p>
+              <h1 className="animate-rise mt-7 text-balance text-[2.6rem] font-semibold leading-[0.97] tracking-[-0.045em] sm:text-6xl">
+                Layanan rekayasa digital{" "}
+                <span className="font-serif font-normal italic text-ember-ink">
+                  komprehensif
+                </span>{" "}
+                berstandar enterprise.
+              </h1>
+              <p className="animate-rise mt-7 max-w-xl text-pretty text-base leading-relaxed text-muted sm:text-lg">
+                Kami menghadirkan spektrum keahlian teknologi menyeluruh, dari
+                konseptualisasi sistem hingga deployment berskala jutaan
+                pengguna.
+              </p>
+              <div className="animate-rise mt-8 flex flex-wrap gap-3">
+                <Button href="/contact" size="lg" arrow>
+                  Konsultasi kebutuhan Anda
+                </Button>
+                <Button href="/portfolio" variant="outline" size="lg">
+                  Lihat hasil kerja
+                </Button>
+              </div>
+            </div>
+
+            <div className="lg:col-span-5">
+              <div className="border-y border-line">
+                {servicesData.map((service, index) => (
+                  <a
+                    key={service.id}
+                    href={`#${service.slug}`}
+                    className="group flex items-center justify-between gap-4 border-b border-line py-4 last:border-b-0"
+                  >
+                    <span className="flex items-baseline gap-4">
+                      <span className="font-mono text-[10px] text-muted">
+                        {String(index + 1).padStart(2, "0")}
+                      </span>
+                      <span className="text-sm font-medium text-ink transition-colors duration-300 group-hover:text-ember-ink">
+                        {service.title}
+                      </span>
+                    </span>
+                    <ArrowUpRight className="h-4 w-4 shrink-0 text-line transition-all duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-ember-ink" />
+                  </a>
+                ))}
+              </div>
+              <p className="mt-4 font-mono text-[10px] uppercase tracking-[0.2em] text-muted">
+                Klik untuk lompat ke detail layanan
+              </p>
+            </div>
+          </div>
         </div>
       </section>
 
       {/* 2. SERVICES GRID */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-          {servicesData.map((service) => (
-            <ServiceCard key={service.id} service={service} />
-          ))}
+      <section className="border-t border-line py-20 sm:py-24">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+            {servicesData.map((service, index) => (
+              <Reveal key={service.id} delay={(index % 3) * 80}>
+                <ServiceCard service={service} index={index} />
+              </Reveal>
+            ))}
+          </div>
         </div>
       </section>
 
-      {/* 3. WORKFLOW PROCESS */}
-      <section className="bg-slate-900 text-white py-16 sm:py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <SectionHeading
-            badge="Metodologi Agile"
-            title="Siklus Pengembangan Perangkat Lunak Kami"
-            subtitle="Menjamin kepastian tenggat waktu, transparansi anggaran, dan kualitas kode yang teruji di setiap iterasi."
-            dark={true}
-          />
+      {/* 3. PROCESS */}
+      <section className="grain grain-light relative overflow-hidden bg-ink py-20 text-bone sm:py-28">
+        <div className="absolute inset-0 bg-blueprint-dark opacity-50" />
+        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <Reveal>
+            <SectionHeading
+              dark
+              index="02"
+              badge="Metodologi agile"
+              title={
+                <>
+                  Siklus pengembangan yang{" "}
+                  <span className="font-serif font-normal italic text-ember">
+                    terukur
+                  </span>
+                  .
+                </>
+              }
+              subtitle="Menjamin kepastian tenggat waktu, transparansi anggaran, dan kualitas kode yang teruji di setiap iterasi."
+            />
+          </Reveal>
 
-          <div className="mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {[
-              {
-                icon: Layers,
-                step: "Tahap 1",
-                title: "Analisis Arsitektur",
-                desc: "Identifikasi kebutuhan fungsional & non-fungsional, pemodelan data, dan pemilihan stack teknologi yang tepat.",
-              },
-              {
-                icon: Code2,
-                step: "Tahap 2",
-                title: "Sprint Pengembangan",
-                desc: "Iterasi dua mingguan menggunakan clean architecture, code review berlapis, dan branch protection.",
-              },
-              {
-                icon: ShieldCheck,
-                step: "Tahap 3",
-                title: "QA & Security Audit",
-                desc: "Penetrasi testing, automated regression test, load testing 10.000+ virtual users, dan audit celah keamanan.",
-              },
-              {
-                icon: Workflow,
-                step: "Tahap 4",
-                title: "Rilis & Operasional",
-                desc: "Penerapan CI/CD zero-downtime, setup dashboard pemantauan, dan SLA dukungan 24/7 purna-jual.",
-              },
-            ].map((st, i) => {
-              const Icon = st.icon;
+          <div className="mt-14 grid gap-px overflow-hidden rounded-2xl border border-bone/10 bg-bone/10 sm:grid-cols-2 lg:grid-cols-4">
+            {processSteps.map((step, index) => {
+              const Icon = step.icon;
               return (
-                <div
-                  key={i}
-                  className="bg-slate-800/70 border border-slate-700/80 rounded-2xl p-6 relative group hover:border-cyan-500/80 transition-colors"
+                <Reveal
+                  key={step.title}
+                  delay={index * 70}
+                  className="h-full bg-ink"
                 >
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs font-bold text-cyan-400 uppercase tracking-wider">
-                      {st.step}
-                    </span>
-                    <div className="w-9 h-9 rounded-lg bg-blue-500/20 text-cyan-300 flex items-center justify-center">
-                      <Icon className="w-5 h-5" />
+                  <div className="group h-full p-7 transition-colors duration-300 hover:bg-bone/[0.04]">
+                    <div className="flex items-center justify-between">
+                      <span className="flex h-10 w-10 items-center justify-center rounded-xl border border-bone/15 text-ember">
+                        <Icon className="h-4 w-4" />
+                      </span>
+                      <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-bone/35">
+                        {step.step}
+                      </span>
                     </div>
+                    <h3 className="mt-7 text-lg font-semibold transition-colors duration-300 group-hover:text-ember">
+                      {step.title}
+                    </h3>
+                    <p className="mt-2.5 text-xs leading-relaxed text-bone/45">
+                      {step.desc}
+                    </p>
                   </div>
-                  <h4 className="mt-4 font-bold text-lg text-white">
-                    {st.title}
-                  </h4>
-                  <p className="mt-2 text-xs sm:text-sm text-slate-400 leading-relaxed">
-                    {st.desc}
-                  </p>
-                </div>
+                </Reveal>
               );
             })}
           </div>
         </div>
       </section>
 
-      {/* 4. KEUNGGULAN KAMI */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="bg-gradient-to-r from-blue-50 via-indigo-50 to-cyan-50 border border-blue-100 rounded-3xl p-8 sm:p-12">
-          <div className="max-w-3xl">
-            <span className="text-xs font-bold uppercase tracking-wider text-blue-700">
-              Jaminan Standar Kualitas
-            </span>
-            <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 mt-2">
-              Apa yang Membedakan Layanan Nusantara Tekno Solusi?
-            </h2>
-            <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div className="flex items-start gap-3">
-                <CheckCircle2 className="w-5 h-5 text-blue-600 shrink-0 mt-0.5" />
-                <span className="text-sm text-slate-700">
-                  <strong>100% Hak Milik Kode:</strong> Repositori dan hak cipta diserahkan penuh kepada klien.
-                </span>
-              </div>
-              <div className="flex items-start gap-3">
-                <CheckCircle2 className="w-5 h-5 text-blue-600 shrink-0 mt-0.5" />
-                <span className="text-sm text-slate-700">
-                  <strong>Skalabilitas Teruji:</strong> Arsitektur dirancang siap menangani lonjakan jutaan request.
-                </span>
-              </div>
-              <div className="flex items-start gap-3">
-                <CheckCircle2 className="w-5 h-5 text-blue-600 shrink-0 mt-0.5" />
-                <span className="text-sm text-slate-700">
-                  <strong>Dokumentasi Terstruktur:</strong> OpenAPI/Swagger spec, arsitektur wiki, dan SOP operasional.
-                </span>
-              </div>
-              <div className="flex items-start gap-3">
-                <CheckCircle2 className="w-5 h-5 text-blue-600 shrink-0 mt-0.5" />
-                <span className="text-sm text-slate-700">
-                  <strong>Garansi Pasca-Peluncuran:</strong> Perbaikan bug tanpa biaya tambahan selama masa garansi.
-                </span>
+      {/* 4. DIFFERENTIATORS */}
+      <section className="py-20 sm:py-28">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="grid gap-12 lg:grid-cols-12">
+            <div className="lg:col-span-4">
+              <Reveal>
+                <SectionHeading
+                  centered={false}
+                  index="03"
+                  badge="Standar kami"
+                  title={
+                    <>
+                      Kualitas tanpa{" "}
+                      <span className="font-serif font-normal italic text-ember-ink">
+                        kompromi
+                      </span>
+                      .
+                    </>
+                  }
+                  subtitle="Empat jaminan yang membedakan layanan kami dari vendor biasa."
+                />
+              </Reveal>
+            </div>
+
+            <div className="lg:col-span-8">
+              <div className="grid gap-px overflow-hidden rounded-2xl border border-line bg-line sm:grid-cols-2">
+                {differentiators.map((item, index) => (
+                  <Reveal
+                    key={item.title}
+                    delay={index * 60}
+                    className="h-full bg-cream"
+                  >
+                    <div className="group h-full p-7 transition-colors duration-300 hover:bg-bone">
+                      <span className="font-mono text-[10px] text-ember-ink">
+                        {String(index + 1).padStart(2, "0")}
+                      </span>
+                      <h3 className="mt-4 text-base font-semibold text-ink">
+                        {item.title}
+                      </h3>
+                      <p className="mt-2 text-sm leading-relaxed text-muted">
+                        {item.desc}
+                      </p>
+                    </div>
+                  </Reveal>
+                ))}
               </div>
             </div>
           </div>
@@ -154,7 +249,7 @@ export default function ServicesPage() {
 
       {/* 5. CTA */}
       <CtaBanner
-        title="Butuh Solusi Khusus Sesuai Kebutuhan Spesifik Perusahaan Anda?"
+        title="Butuh solusi khusus sesuai kebutuhan spesifik perusahaan Anda?"
         description="Jadwalkan sesi konsultasi teknologi gratis bersama tim arsitek solusi kami hari ini."
       />
     </div>

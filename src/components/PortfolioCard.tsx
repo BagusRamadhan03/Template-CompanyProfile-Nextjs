@@ -1,101 +1,118 @@
 import Link from "next/link";
+import { ArrowUpRight } from "lucide-react";
 import { PortfolioProject } from "@/lib/data/portfolio";
-import { ArrowUpRight, TrendingUp, Layers } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 interface PortfolioCardProps {
   project: PortfolioProject;
+  featured?: boolean;
 }
 
-export function PortfolioCard({ project }: PortfolioCardProps) {
+export function PortfolioCard({
+  project,
+  featured = false,
+}: PortfolioCardProps) {
   const primaryResult = project.results[0];
+  const monogram = project.clientName
+    .split(" ")
+    .filter((word) => /^[A-Za-z]/.test(word))
+    .slice(0, 2)
+    .map((word) => word[0])
+    .join("")
+    .toUpperCase();
 
   return (
-    <div className="group bg-white rounded-2xl border border-slate-200/80 overflow-hidden shadow-sm hover:shadow-xl hover:border-slate-300 transition-all duration-300 flex flex-col justify-between">
-      <div>
-        {/* Visual Cover Banner */}
-        <div
-          className={`h-48 bg-gradient-to-tr ${project.coverGradient} p-6 flex flex-col justify-between relative overflow-hidden`}
+    <Link
+      href={`/portfolio/${project.slug}`}
+      className={cn(
+        "group flex flex-col overflow-hidden rounded-2xl border border-line bg-cream transition-all duration-500 hover:-translate-y-1 hover:border-ink/25 hover:shadow-[0_35px_70px_-45px_rgba(18,18,16,0.5)]",
+        featured && "md:col-span-2"
+      )}
+    >
+      <div
+        className={cn(
+          "grain grain-light relative overflow-hidden bg-gradient-to-br p-6 text-bone sm:p-8",
+          project.coverGradient,
+          featured ? "min-h-[21rem] sm:min-h-[25rem]" : "min-h-[15rem]"
+        )}
+      >
+        <div className="absolute inset-0 bg-blueprint-dark opacity-40" />
+        <div className="absolute -right-16 -top-16 h-48 w-48 rounded-full border border-bone/15" />
+        <span
+          aria-hidden="true"
+          className="pointer-events-none absolute -bottom-10 right-2 select-none font-serif text-[9rem] italic leading-none text-bone/10 transition-transform duration-700 group-hover:-translate-y-2"
         >
-          {/* Subtle decorative shapes */}
-          <div className="absolute -right-8 -bottom-8 w-40 h-40 bg-white/10 rounded-full blur-xl pointer-events-none" />
-          <div className="absolute top-0 right-0 p-4 opacity-20 group-hover:opacity-40 transition-opacity">
-            <Layers className="w-24 h-24 text-white" />
-          </div>
+          {monogram}
+        </span>
 
-          <div className="flex items-center justify-between z-10">
-            <span className="px-3 py-1 bg-white/20 backdrop-blur-md text-white text-xs font-semibold rounded-full">
+        <div className="relative z-10 flex h-full flex-col justify-between gap-14">
+          <div className="flex items-center justify-between gap-4">
+            <span className="rounded-full border border-bone/25 bg-bone/10 px-3 py-1 font-mono text-[9px] uppercase tracking-[0.18em] backdrop-blur-sm">
               {project.category}
             </span>
-            <span className="text-xs text-white/80 font-medium">
+            <span className="font-mono text-[10px] text-bone/60">
               {project.year}
             </span>
           </div>
 
-          <div className="z-10">
-            <span className="text-xs uppercase tracking-wider text-white/75 font-semibold">
-              Klien: {project.clientName}
-            </span>
-            <h3 className="text-lg sm:text-xl font-bold text-white mt-1 line-clamp-2 drop-shadow-sm">
+          <div>
+            <p className="font-mono text-[10px] uppercase tracking-[0.24em] text-bone/55">
+              {project.clientName}
+            </p>
+            <h3
+              className={cn(
+                "mt-2 max-w-2xl text-balance font-semibold tracking-tight text-bone",
+                featured ? "text-2xl sm:text-4xl" : "text-xl sm:text-2xl"
+              )}
+            >
               {project.title}
             </h3>
           </div>
         </div>
+      </div>
 
-        {/* Content Body */}
-        <div className="p-6">
-          <p className="text-sm text-slate-600 leading-relaxed line-clamp-3">
+      <div className="flex flex-1 flex-col justify-between p-6 sm:p-7">
+        <div>
+          <p className="line-clamp-2 text-sm leading-relaxed text-muted">
             {project.shortSummary}
           </p>
-
-          {/* Key Metric Highlight */}
-          {primaryResult && (
-            <div className="mt-4 p-3 bg-blue-50/70 border border-blue-100 rounded-xl flex items-center gap-3">
-              <div className="w-8 h-8 rounded-lg bg-blue-600 text-white flex items-center justify-center shrink-0">
-                <TrendingUp className="w-4 h-4" />
-              </div>
-              <div>
-                <p className="text-xs text-blue-900 font-bold">
-                  {primaryResult.value}{" "}
-                  <span className="text-blue-700 font-medium">
-                    ({primaryResult.label})
-                  </span>
-                </p>
-                <p className="text-[11px] text-slate-500 line-clamp-1">
-                  {primaryResult.description}
-                </p>
-              </div>
-            </div>
-          )}
-
-          {/* Tech Stack Pills */}
-          <div className="mt-4 flex flex-wrap gap-1.5">
-            {project.techStack.slice(0, 4).map((tech) => (
-              <span
-                key={tech}
-                className="text-[11px] font-medium bg-slate-100 text-slate-600 px-2 py-0.5 rounded-md"
-              >
-                {tech}
-              </span>
-            ))}
-            {project.techStack.length > 4 && (
-              <span className="text-[11px] font-medium bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded-md">
-                +{project.techStack.length - 4}
+          <div className="mt-5 flex flex-wrap gap-1.5">
+            {project.techStack
+              .slice(0, featured ? 5 : 3)
+              .map((tech) => (
+                <span
+                  key={tech}
+                  className="rounded-md border border-line bg-bone/60 px-2 py-1 text-[10px] font-medium text-ink/60"
+                >
+                  {tech}
+                </span>
+              ))}
+            {project.techStack.length > (featured ? 5 : 3) && (
+              <span className="rounded-md border border-line bg-bone/60 px-2 py-1 text-[10px] font-medium text-muted">
+                +{project.techStack.length - (featured ? 5 : 3)}
               </span>
             )}
           </div>
         </div>
-      </div>
 
-      {/* Footer Link */}
-      <div className="p-6 pt-0">
-        <Link
-          href={`/portfolio/${project.slug}`}
-          className="w-full inline-flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl text-sm font-semibold text-slate-700 bg-slate-50 hover:bg-blue-600 hover:text-white border border-slate-200 hover:border-transparent transition-all group-hover:shadow-md"
-        >
-          <span>Baca Studi Kasus</span>
-          <ArrowUpRight className="w-4 h-4" />
-        </Link>
+        <div className="mt-6 flex items-end justify-between border-t border-line pt-5">
+          {primaryResult ? (
+            <div>
+              <p className="font-serif text-2xl italic leading-none text-ember-ink">
+                {primaryResult.value}
+              </p>
+              <p className="mt-1.5 font-mono text-[9px] uppercase tracking-[0.16em] text-muted">
+                {primaryResult.label}
+              </p>
+            </div>
+          ) : (
+            <span />
+          )}
+          <span className="flex h-10 w-10 items-center justify-center rounded-full border border-line text-ink transition-all duration-300 group-hover:border-ink group-hover:bg-ink group-hover:text-bone">
+            <ArrowUpRight className="h-4 w-4" />
+          </span>
+        </div>
       </div>
-    </div>
+    </Link>
   );
 }

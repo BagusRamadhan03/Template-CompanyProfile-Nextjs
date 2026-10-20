@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { servicesData } from "@/lib/data/services";
-import { Send, CheckCircle2, AlertCircle, Loader2 } from "lucide-react";
+import { AlertCircle, CheckCircle2, Loader2, Send } from "lucide-react";
 
 interface FormState {
   fullName: string;
@@ -24,6 +24,12 @@ const initialFormState: FormState = {
   message: "",
 };
 
+const inputClasses =
+  "w-full rounded-xl border border-line bg-bone/30 px-4 py-3 text-sm text-ink outline-none transition-all placeholder:text-muted/60 focus:border-ember focus:bg-cream focus:ring-2 focus:ring-ember/20 focus-visible:outline-none";
+
+const labelClasses =
+  "mb-2 block font-mono text-[10px] font-semibold uppercase tracking-[0.16em] text-muted";
+
 export function ContactForm() {
   const [formData, setFormData] = useState<FormState>(initialFormState);
   const [isLoading, setIsLoading] = useState(false);
@@ -31,7 +37,9 @@ export function ContactForm() {
   const [errorMessage, setErrorMessage] = useState("");
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
   ) => {
     setFormData((prev) => ({
       ...prev,
@@ -46,7 +54,11 @@ export function ContactForm() {
     setErrorMessage("");
 
     // Basic client validation
-    if (!formData.fullName.trim() || !formData.email.trim() || !formData.message.trim()) {
+    if (
+      !formData.fullName.trim() ||
+      !formData.email.trim() ||
+      !formData.message.trim()
+    ) {
       setStatus("error");
       setErrorMessage("Mohon lengkapi Nama, Email, dan Pesan Anda.");
       setIsLoading(false);
@@ -73,7 +85,9 @@ export function ContactForm() {
       if (err instanceof Error) {
         setErrorMessage(err.message);
       } else {
-        setErrorMessage("Terjadi kendala jaringan. Silakan hubungi kami via WhatsApp.");
+        setErrorMessage(
+          "Terjadi kendala jaringan. Silakan hubungi kami via WhatsApp."
+        );
       }
     } finally {
       setIsLoading(false);
@@ -81,47 +95,48 @@ export function ContactForm() {
   };
 
   return (
-    <div className="bg-white rounded-3xl p-6 sm:p-10 border border-slate-200/80 shadow-lg shadow-slate-200/50">
-      <div className="mb-6">
-        <h3 className="text-xl sm:text-2xl font-bold text-slate-900">
-          Kirimkan Rencana Proyek Anda
+    <div className="rounded-2xl border border-line bg-cream p-6 sm:p-10">
+      <div className="mb-8">
+        <p className="font-mono text-[10px] uppercase tracking-[0.24em] text-muted">
+          Formulir — 03
+        </p>
+        <h3 className="mt-3 text-2xl font-semibold tracking-tight text-ink">
+          Kirimkan rencana proyek Anda
         </h3>
-        <p className="mt-1 text-sm text-slate-600">
-          Tim konsultan teknis kami akan merespons dalam waktu 1x24 jam kerja dengan estimasi awal.
+        <p className="mt-2 text-sm leading-relaxed text-muted">
+          Tim konsultan teknis kami akan merespons dalam waktu 1x24 jam kerja
+          dengan estimasi awal.
         </p>
       </div>
 
       {status === "success" && (
-        <div className="mb-6 p-4 bg-emerald-50 border border-emerald-200 rounded-2xl flex items-start gap-3 text-emerald-800">
-          <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
+        <div className="mb-7 flex items-start gap-3 rounded-xl border border-emerald-200 bg-emerald-50 p-4 text-emerald-900">
+          <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-emerald-600" />
           <div className="text-sm">
-            <p className="font-semibold">Pesan Anda Berhasil Terkirim!</p>
+            <p className="font-semibold">Pesan Anda berhasil terkirim!</p>
             <p className="mt-0.5 text-emerald-700">
-              Terima kasih telah menghubungi Nusantara Tekno Solusi. Tim kami akan segera meninjau kebutuhan proyek Anda.
+              Terima kasih telah menghubungi Nusantara Tekno Solusi. Tim kami
+              akan segera meninjau kebutuhan proyek Anda.
             </p>
           </div>
         </div>
       )}
 
       {status === "error" && (
-        <div className="mb-6 p-4 bg-rose-50 border border-rose-200 rounded-2xl flex items-start gap-3 text-rose-800">
-          <AlertCircle className="w-5 h-5 text-rose-600 shrink-0 mt-0.5" />
+        <div className="mb-7 flex items-start gap-3 rounded-xl border border-rose-200 bg-rose-50 p-4 text-rose-900">
+          <AlertCircle className="mt-0.5 h-5 w-5 shrink-0 text-rose-600" />
           <div className="text-sm">
-            <p className="font-semibold">Gagal Mengirim Pesan</p>
+            <p className="font-semibold">Gagal mengirim pesan</p>
             <p className="mt-0.5 text-rose-700">{errorMessage}</p>
           </div>
         </div>
       )}
 
-      <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-5">
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
-          {/* Full Name */}
+      <form onSubmit={handleSubmit} className="space-y-6">
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
           <div>
-            <label
-              htmlFor="fullName"
-              className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5"
-            >
-              Nama Lengkap <span className="text-rose-500">*</span>
+            <label htmlFor="fullName" className={labelClasses}>
+              Nama lengkap <span className="text-ember-ink">*</span>
             </label>
             <input
               type="text"
@@ -131,17 +146,13 @@ export function ContactForm() {
               value={formData.fullName}
               onChange={handleChange}
               placeholder="Contoh: Budi Pratama"
-              className="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 text-slate-900 text-sm outline-none transition-all placeholder:text-slate-400"
+              className={inputClasses}
             />
           </div>
 
-          {/* Email */}
           <div>
-            <label
-              htmlFor="email"
-              className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5"
-            >
-              Alamat Email Bisnis <span className="text-rose-500">*</span>
+            <label htmlFor="email" className={labelClasses}>
+              Email bisnis <span className="text-ember-ink">*</span>
             </label>
             <input
               type="email"
@@ -151,19 +162,15 @@ export function ContactForm() {
               value={formData.email}
               onChange={handleChange}
               placeholder="budi@perusahaan.co.id"
-              className="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 text-slate-900 text-sm outline-none transition-all placeholder:text-slate-400"
+              className={inputClasses}
             />
           </div>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
-          {/* Phone / WhatsApp */}
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
           <div>
-            <label
-              htmlFor="phone"
-              className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5"
-            >
-              Nomor Telepon / WhatsApp <span className="text-rose-500">*</span>
+            <label htmlFor="phone" className={labelClasses}>
+              Telepon / WhatsApp <span className="text-ember-ink">*</span>
             </label>
             <input
               type="tel"
@@ -173,17 +180,13 @@ export function ContactForm() {
               value={formData.phone}
               onChange={handleChange}
               placeholder="081234567890"
-              className="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 text-slate-900 text-sm outline-none transition-all placeholder:text-slate-400"
+              className={inputClasses}
             />
           </div>
 
-          {/* Company Name */}
           <div>
-            <label
-              htmlFor="companyName"
-              className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5"
-            >
-              Nama Perusahaan / Organisasi
+            <label htmlFor="companyName" className={labelClasses}>
+              Nama perusahaan / organisasi
             </label>
             <input
               type="text"
@@ -192,100 +195,94 @@ export function ContactForm() {
               value={formData.companyName}
               onChange={handleChange}
               placeholder="PT Contoh Maju Bersama"
-              className="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 text-slate-900 text-sm outline-none transition-all placeholder:text-slate-400"
+              className={inputClasses}
             />
           </div>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
-          {/* Service Category */}
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
           <div>
-            <label
-              htmlFor="serviceCategory"
-              className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5"
-            >
-              Layanan yang Dibutuhkan
+            <label htmlFor="serviceCategory" className={labelClasses}>
+              Layanan yang dibutuhkan
             </label>
             <select
               id="serviceCategory"
               name="serviceCategory"
               value={formData.serviceCategory}
               onChange={handleChange}
-              className="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 text-slate-900 text-sm outline-none transition-all bg-white"
+              className={inputClasses}
             >
-              {servicesData.map((s) => (
-                <option key={s.id} value={s.slug}>
-                  {s.title}
+              {servicesData.map((service) => (
+                <option key={service.id} value={service.slug}>
+                  {service.title}
                 </option>
               ))}
-              <option value="custom">Konsultasi Khusus Lainnya</option>
+              <option value="custom">Konsultasi khusus lainnya</option>
             </select>
           </div>
 
-          {/* Budget Range */}
           <div>
-            <label
-              htmlFor="budgetRange"
-              className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5"
-            >
-              Estimasi Anggaran
+            <label htmlFor="budgetRange" className={labelClasses}>
+              Estimasi anggaran
             </label>
             <select
               id="budgetRange"
               name="budgetRange"
               value={formData.budgetRange}
               onChange={handleChange}
-              className="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 text-slate-900 text-sm outline-none transition-all bg-white"
+              className={inputClasses}
             >
               <option value="< 50 Juta">&lt; Rp 50 Juta</option>
-              <option value="50 - 150 Juta">Rp 50 Juta – Rp 150 Juta</option>
-              <option value="150 - 500 Juta">Rp 150 Juta – Rp 500 Juta</option>
+              <option value="50 - 150 Juta">
+                Rp 50 Juta – Rp 150 Juta
+              </option>
+              <option value="150 - 500 Juta">
+                Rp 150 Juta – Rp 500 Juta
+              </option>
               <option value="> 500 Juta">&gt; Rp 500 Juta</option>
-              <option value="Belum Ditentukan">Belum Ditentukan / Fleksibel</option>
+              <option value="Belum Ditentukan">
+                Belum ditentukan / fleksibel
+              </option>
             </select>
           </div>
         </div>
 
-        {/* Message */}
         <div>
-          <label
-            htmlFor="message"
-            className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5"
-          >
-            Deskripsi Kebutuhan & Target Proyek <span className="text-rose-500">*</span>
+          <label htmlFor="message" className={labelClasses}>
+            Deskripsi kebutuhan & target proyek{" "}
+            <span className="text-ember-ink">*</span>
           </label>
           <textarea
             id="message"
             name="message"
-            rows={4}
+            rows={5}
             required
             value={formData.message}
             onChange={handleChange}
             placeholder="Jelaskan secara ringkas tantangan bisnis, sistem yang ingin dibangun, atau tenggat waktu target..."
-            className="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 text-slate-900 text-sm outline-none transition-all placeholder:text-slate-400"
+            className={inputClasses}
           />
         </div>
 
-        {/* Submit button */}
-        <div className="pt-2">
+        <div className="pt-1">
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full py-3.5 px-6 rounded-xl text-white font-semibold bg-blue-600 hover:bg-blue-700 active:scale-[0.99] disabled:opacity-60 disabled:cursor-not-allowed shadow-md shadow-blue-500/20 flex items-center justify-center gap-2 transition-all"
+            className="inline-flex w-full items-center justify-center gap-3 rounded-full bg-ink px-6 py-3.5 text-[15px] font-semibold text-bone transition-all duration-300 hover:bg-ember hover:text-ink disabled:cursor-not-allowed disabled:opacity-60"
           >
             {isLoading ? (
               <>
-                <Loader2 className="w-5 h-5 animate-spin" />
-                <span>Mengirimkan Pesan...</span>
+                <Loader2 className="h-5 w-5 animate-spin" />
+                <span>Mengirimkan pesan...</span>
               </>
             ) : (
               <>
-                <span>Kirim Formulir Konsultasi</span>
-                <Send className="w-4 h-4" />
+                <span>Kirim formulir konsultasi</span>
+                <Send className="h-4 w-4" />
               </>
             )}
           </button>
-          <p className="text-center text-[11px] text-slate-400 mt-2">
+          <p className="mt-3 text-center text-[11px] text-muted">
             Kami menjaga kerahasiaan informasi proyek dan mematuhi NDA.
           </p>
         </div>

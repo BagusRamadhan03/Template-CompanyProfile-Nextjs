@@ -4,384 +4,591 @@ import { servicesData } from "@/lib/data/services";
 import { portfolioData } from "@/lib/data/portfolio";
 import { testimonialsData } from "@/lib/data/testimonials";
 import { SectionHeading } from "@/components/SectionHeading";
-import { ServiceCard } from "@/components/ServiceCard";
 import { PortfolioCard } from "@/components/PortfolioCard";
 import { CtaBanner } from "@/components/CtaBanner";
+import { StatsStrip } from "@/components/StatsStrip";
+import { Reveal } from "@/components/ui/Reveal";
+import { Marquee } from "@/components/ui/Marquee";
+import { Button } from "@/components/ui/Button";
 import {
-  ArrowRight,
-  ShieldCheck,
-  Zap,
+  ArrowUpRight,
   Award,
-  Users2,
-  CheckCircle,
+  Gauge,
   Quote,
+  ShieldCheck,
   Star,
-  Sparkles,
+  Users2,
+  Zap,
 } from "lucide-react";
+
+const clients = [
+  "Bank Artha Nusantara",
+  "Nusantara Express Cargo",
+  "Medika Sehat Bersama",
+  "Gaya Retail Group",
+  "Eduka Cendekia",
+  "Dinas Komunikasi & Informatika",
+];
+
+const principles = [
+  {
+    title: "Kualitas & keamanan standar enterprise",
+    description:
+      "Mematuhi OWASP, enkripsi data end-to-end, dan pengujian berkala di setiap rilis.",
+    icon: ShieldCheck,
+  },
+  {
+    title: "Kecepatan eksekusi dengan metodologi agile",
+    description:
+      "Sprint dua mingguan dengan laporan kemajuan transparan dan demo langsung.",
+    icon: Zap,
+  },
+  {
+    title: "Dukungan pasca-rilis & SLA terjamin",
+    description:
+      "Garansi perbaikan bug dan pemantauan sistem 24/7 demi kelancaran operasional.",
+    icon: Users2,
+  },
+];
+
+const workSteps = [
+  {
+    title: "Discovery & Blueprint",
+    desc: "Riset mendalam kebutuhan proses bisnis, audit arsitektur eksisting, dan perancangan roadmap teknis terperinci.",
+  },
+  {
+    title: "UI/UX & Prototyping",
+    desc: "Pembuatan antarmuka intuitif dan prototipe interaktif untuk memvalidasi alur sebelum tahap coding dimulai.",
+  },
+  {
+    title: "Agile Development",
+    desc: "Penulisan kode berkualitas dengan standardisasi clean code, pengujian otomatis, dan demo berkala.",
+  },
+  {
+    title: "Deployment & Support",
+    desc: "Migrasi zero-downtime, pemantauan performa real-time, serta pelatihan tim internal perusahaan Anda.",
+  },
+];
 
 export default function HomePage() {
   const featuredServices = servicesData.slice(0, 3);
-  const featuredProjects = portfolioData.filter((p) => p.featured).slice(0, 3);
+  const featuredProjects = portfolioData
+    .filter((project) => project.featured)
+    .slice(0, 3);
+  const [featuredTestimonial, ...otherTestimonials] = testimonialsData;
 
   return (
-    <div className="space-y-16 sm:space-y-24">
-      {/* 1. HERO SECTION */}
-      <section className="relative overflow-hidden pt-12 pb-20 sm:pt-20 sm:pb-28">
-        {/* Subtle Background Elements */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-[600px] pointer-events-none -z-10">
-          <div className="absolute -top-24 left-1/4 w-96 h-96 bg-blue-400/15 rounded-full blur-3xl" />
-          <div className="absolute top-10 right-1/4 w-96 h-96 bg-cyan-400/15 rounded-full blur-3xl" />
-        </div>
+    <div>
+      {/* 1. HERO */}
+      <section className="relative overflow-hidden">
+        <div className="pointer-events-none absolute -left-40 top-24 h-96 w-96 rounded-full bg-ember/10 blur-3xl" />
+        <div className="pointer-events-none absolute -right-32 -top-24 h-[30rem] w-[30rem] rounded-full bg-ember/5 blur-3xl" />
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-3xl mx-auto">
-            {/* Pill Badge */}
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-50 border border-blue-200/60 text-blue-700 text-xs sm:text-sm font-semibold mb-6 shadow-sm">
-              <span className="flex h-2 w-2 rounded-full bg-blue-600 animate-pulse" />
-              <span>Arsitek Transformasi Digital & Rekayasa Software</span>
-            </div>
-
-            {/* Headline */}
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-900 tracking-tight leading-[1.15]">
-              Membangun Solusi Teknologi{" "}
-              <span className="bg-gradient-to-r from-blue-600 via-indigo-600 to-cyan-500 bg-clip-text text-transparent">
-                Berkelas Dunia
-              </span>{" "}
-              untuk Bisnis Anda
-            </h1>
-
-            {/* Subtitle */}
-            <p className="mt-6 text-lg sm:text-xl text-slate-600 leading-relaxed max-w-2xl mx-auto">
-              {companyData.shortBio}
-            </p>
-
-            {/* CTA Buttons */}
-            <div className="mt-8 sm:mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
-              <Link
-                href="/contact"
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl text-base font-semibold text-white bg-blue-600 hover:bg-blue-700 shadow-lg shadow-blue-600/25 active:scale-95 transition-all"
-              >
-                <span>Mulai Konsultasi Proyek</span>
-                <ArrowRight className="w-5 h-5" />
-              </Link>
-              <Link
-                href="/portfolio"
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl text-base font-semibold text-slate-700 bg-white hover:bg-slate-50 border border-slate-200 shadow-sm transition-all"
-              >
-                <span>Jelajahi Portofolio Kami</span>
-              </Link>
-            </div>
-          </div>
-
-          {/* Key Metrics / Highlights Grid */}
-          <div className="mt-16 sm:mt-20 grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 max-w-5xl mx-auto">
-            {companyData.stats.map((stat, idx) => (
-              <div
-                key={idx}
-                className="bg-white/80 backdrop-blur-sm border border-slate-200/80 rounded-2xl p-5 sm:p-6 text-center shadow-sm hover:shadow-md transition-shadow"
-              >
-                <div className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-blue-600">
-                  {stat.value}
-                </div>
-                <div className="mt-1 font-semibold text-sm sm:text-base text-slate-800">
-                  {stat.label}
-                </div>
-                <div className="mt-1 text-xs text-slate-500 hidden sm:block">
-                  {stat.description}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* 2. TRUSTED BY / PARTNER BAR */}
-      <section className="border-y border-slate-200/60 bg-white py-10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <p className="text-center text-xs font-semibold uppercase tracking-widest text-slate-400 mb-6">
-            Dipercaya oleh Perusahaan Terkemuka & Institusi Berstandar Tinggi
-          </p>
-          <div className="flex flex-wrap items-center justify-center gap-8 sm:gap-14 opacity-75 grayscale hover:grayscale-0 transition-all duration-300">
-            {["Bank Artha Nusantara", "Nusantara Cargo", "Medika Sehat", "Gaya Retail Group", "Eduka Cendekia"].map(
-              (client, i) => (
-                <div
-                  key={i}
-                  className="font-bold text-sm sm:text-base tracking-wider text-slate-600 hover:text-blue-600 transition-colors"
-                >
-                  {client}
-                </div>
-              )
-            )}
-          </div>
-        </div>
-      </section>
-
-      {/* 3. TENTANG KAMI TEASER */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          <div>
-            <SectionHeading
-              badge="Tentang Nusantara Tekno"
-              title="Dedikasi Mengubah Kompleksitas Menjadi Solusi Digital Efisien"
-              subtitle={companyData.fullBio}
-              centered={false}
-            />
-
-            <div className="mt-8 space-y-4">
-              <div className="flex items-start gap-3.5">
-                <div className="w-9 h-9 rounded-xl bg-blue-50 border border-blue-100 flex items-center justify-center text-blue-600 shrink-0">
-                  <ShieldCheck className="w-5 h-5" />
-                </div>
-                <div>
-                  <h4 className="font-bold text-slate-900 text-sm">
-                    Kualitas & Keamanan Standar Enterprise
-                  </h4>
-                  <p className="text-xs sm:text-sm text-slate-600 mt-0.5">
-                    Mematuhi standar OWASP, enkripsi data end-to-end, dan pengujian berkala.
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-3.5">
-                <div className="w-9 h-9 rounded-xl bg-cyan-50 border border-cyan-100 flex items-center justify-center text-cyan-600 shrink-0">
-                  <Zap className="w-5 h-5" />
-                </div>
-                <div>
-                  <h4 className="font-bold text-slate-900 text-sm">
-                    Kecepatan Eksekusi dengan Metodologi Agile
-                  </h4>
-                  <p className="text-xs sm:text-sm text-slate-600 mt-0.5">
-                    Sprint terjadwal dua mingguan dengan laporan kemajuan transparan.
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-3.5">
-                <div className="w-9 h-9 rounded-xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-indigo-600 shrink-0">
-                  <Users2 className="w-5 h-5" />
-                </div>
-                <div>
-                  <h4 className="font-bold text-slate-900 text-sm">
-                    Dukungan Pasca-Rilis & SLA Terjamin
-                  </h4>
-                  <p className="text-xs sm:text-sm text-slate-600 mt-0.5">
-                    Garansi perbaikan bug dan pemantauan sistem 24/7 demi kelancaran operasional.
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <div className="mt-8">
-              <Link
-                href="/about"
-                className="inline-flex items-center gap-2 text-sm font-bold text-blue-600 hover:text-blue-700 group"
-              >
-                <span>Pelajari Lebih Dalam Tentang Visi & Tim Kami</span>
-                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-              </Link>
-            </div>
-          </div>
-
-          {/* Visual Showcase Card */}
-          <div className="relative">
-            <div className="bg-gradient-to-tr from-blue-600 via-indigo-700 to-slate-900 rounded-3xl p-8 sm:p-10 text-white shadow-2xl relative overflow-hidden">
-              <div className="absolute top-0 right-0 -mr-10 -mt-10 w-48 h-48 bg-white/10 rounded-full blur-2xl pointer-events-none" />
-              <div className="flex items-center justify-between pb-6 border-b border-white/10">
-                <div>
-                  <p className="text-xs text-blue-200 font-semibold uppercase tracking-wider">
-                    Nilai Keberhasilan
-                  </p>
-                  <p className="text-2xl font-bold mt-1">99.2% Tingkat Kepuasan</p>
-                </div>
-                <div className="w-12 h-12 rounded-2xl bg-white/10 backdrop-blur-md flex items-center justify-center">
-                  <Award className="w-6 h-6 text-cyan-300" />
-                </div>
-              </div>
-
-              <div className="mt-6 space-y-4">
-                <div className="bg-white/10 backdrop-blur-md rounded-xl p-4 border border-white/10">
-                  <div className="flex items-center justify-between text-xs text-blue-100 font-medium">
-                    <span>Target Penyelesaian Tepat Waktu</span>
-                    <span className="font-bold text-white">98.5%</span>
-                  </div>
-                  <div className="w-full bg-white/20 rounded-full h-2 mt-2">
-                    <div className="bg-cyan-400 h-2 rounded-full w-[98.5%]" />
-                  </div>
-                </div>
-
-                <div className="bg-white/10 backdrop-blur-md rounded-xl p-4 border border-white/10">
-                  <div className="flex items-center justify-between text-xs text-blue-100 font-medium">
-                    <span>Efisiensi Biaya Operasional Klien</span>
-                    <span className="font-bold text-white">Rata-rata 32%</span>
-                  </div>
-                  <div className="w-full bg-white/20 rounded-full h-2 mt-2">
-                    <div className="bg-emerald-400 h-2 rounded-full w-[85%]" />
-                  </div>
-                </div>
-              </div>
-
-              <div className="mt-8 pt-6 border-t border-white/10 flex items-center gap-3">
-                <Sparkles className="w-5 h-5 text-cyan-300 shrink-0" />
-                <p className="text-xs text-blue-100 leading-relaxed">
-                  Kami mengombinasikan keunggulan teknis dan pemahaman mendalam tentang lanskap bisnis Indonesia.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 4. LAYANAN UNGGULAN */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <SectionHeading
-          badge="Layanan Komprehensif"
-          title="Solusi Rekayasa Digital yang Disesuaikan untuk Bisnis Anda"
-          subtitle="Dari arsitektur aplikasi berbasis web modern hingga integrasi data cerdas, kami menghadirkan kapabilitas teknologi terpadu."
-        />
-
-        <div className="mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-          {featuredServices.map((service) => (
-            <ServiceCard key={service.id} service={service} />
-          ))}
-        </div>
-
-        <div className="mt-10 text-center">
-          <Link
-            href="/services"
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold text-blue-600 bg-blue-50 hover:bg-blue-100 transition-colors"
-          >
-            <span>Lihat Seluruh 6 Katalog Layanan</span>
-            <ArrowRight className="w-4 h-4" />
-          </Link>
-        </div>
-      </section>
-
-      {/* 5. PORTOFOLIO PILIHAN */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <SectionHeading
-          badge="Kisah Sukses Klien"
-          title="Hasil Nyata yang Mendorong Kemajuan Bisnis Klien Kami"
-          subtitle="Pelajari bagaimana kami memecahkan masalah arsitektur yang kompleks dan meluncurkan produk digital bernilai jutaan transaksi."
-        />
-
-        <div className="mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-          {featuredProjects.map((project) => (
-            <PortfolioCard key={project.id} project={project} />
-          ))}
-        </div>
-
-        <div className="mt-10 text-center">
-          <Link
-            href="/portfolio"
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold text-slate-700 bg-white border border-slate-200 hover:bg-slate-50 transition-colors shadow-sm"
-          >
-            <span>Lihat Semua Proyek & Studi Kasus</span>
-            <ArrowRight className="w-4 h-4" />
-          </Link>
-        </div>
-      </section>
-
-      {/* 6. METODOLOGI KERJA */}
-      <section className="bg-slate-900 text-white py-16 sm:py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <SectionHeading
-            badge="Alur Kolaborasi"
-            title="Bagaimana Kami Mengeksekusi Proyek Anda"
-            subtitle="Pendekatan terstruktur dan transparan demi memastikan hasil akhir sesuai ekspektasi tepat waktu."
-            dark={true}
-          />
-
-          <div className="mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {[
-              {
-                step: "01",
-                title: "Discovery & Blueprint",
-                desc: "Riset mendalam kebutuhan proses bisnis, audit arsitektur eksisting, dan perancangan roadmap teknis terperinci.",
-              },
-              {
-                step: "02",
-                title: "UI/UX & Prototyping",
-                desc: "Pembuatan antarmuka intuitif dan prototipe interaktif untuk memvalidasi alur sebelum tahap coding dimulai.",
-              },
-              {
-                step: "03",
-                title: "Agile Development",
-                desc: "Penulisan kode berkualitas dengan standardisasi clean code, pengujian otomatis, dan demo berkala.",
-              },
-              {
-                step: "04",
-                title: "Deployment & Support",
-                desc: "Migrasi zero-downtime, pemantauan performa real-time, serta pelatihan tim internal perusahaan Anda.",
-              },
-            ].map((flow, idx) => (
-              <div
-                key={idx}
-                className="bg-slate-800/60 border border-slate-700/70 rounded-2xl p-6 relative group hover:border-blue-500 transition-colors"
-              >
-                <span className="text-3xl font-black text-blue-500/40 group-hover:text-blue-400 transition-colors">
-                  {flow.step}
+        <div className="relative mx-auto max-w-7xl px-4 pb-16 pt-10 sm:px-6 sm:pt-16 lg:px-8 lg:pb-24">
+          <div className="grid items-center gap-14 lg:grid-cols-12 lg:gap-10">
+            <div className="lg:col-span-7">
+              <span className="animate-rise inline-flex items-center gap-2.5 rounded-full border border-line bg-cream/80 py-1.5 pl-2 pr-4 font-mono text-[10px] font-medium uppercase tracking-[0.2em] text-muted backdrop-blur">
+                <span className="relative flex h-4 w-4 items-center justify-center rounded-full bg-ember/15">
+                  <span className="absolute h-1.5 w-1.5 animate-ping rounded-full bg-ember opacity-70" />
+                  <span className="h-1.5 w-1.5 rounded-full bg-ember" />
                 </span>
-                <h4 className="mt-4 font-bold text-lg text-white">
-                  {flow.title}
-                </h4>
-                <p className="mt-2 text-xs sm:text-sm text-slate-400 leading-relaxed">
-                  {flow.desc}
-                </p>
+                Menerima proyek baru — 2026
+              </span>
+
+              <h1
+                className="animate-rise mt-7 text-balance text-[2.6rem] font-semibold leading-[0.97] tracking-[-0.045em] sm:text-6xl lg:text-[4.3rem]"
+                style={{ animationDelay: "80ms" }}
+              >
+                Membangun solusi teknologi{" "}
+                <span className="font-serif font-normal italic text-ember-ink">
+                  berkelas dunia
+                </span>{" "}
+                untuk bisnis Anda.
+              </h1>
+
+              <p
+                className="animate-rise mt-7 max-w-xl text-pretty text-base leading-relaxed text-muted sm:text-lg"
+                style={{ animationDelay: "160ms" }}
+              >
+                {companyData.shortBio}
+              </p>
+
+              <div
+                className="animate-rise mt-9 flex flex-wrap items-center gap-3"
+                style={{ animationDelay: "240ms" }}
+              >
+                <Button href="/contact" size="lg" arrow>
+                  Mulai konsultasi proyek
+                </Button>
+                <Button href="/portfolio" variant="outline" size="lg">
+                  Jelajahi portofolio
+                </Button>
               </div>
+
+              <div
+                className="animate-rise mt-12 flex flex-wrap items-center gap-x-7 gap-y-3 border-t border-line pt-6 text-xs text-muted"
+                style={{ animationDelay: "320ms" }}
+              >
+                <span className="inline-flex items-center gap-2">
+                  <ShieldCheck className="h-4 w-4 text-ember-ink" />
+                  Standar keamanan enterprise
+                </span>
+                <span className="inline-flex items-center gap-2">
+                  <Gauge className="h-4 w-4 text-ember-ink" />
+                  Pengiriman tepat waktu 98.5%
+                </span>
+                <span className="inline-flex items-center gap-2">
+                  <Users2 className="h-4 w-4 text-ember-ink" />
+                  Tim bersertifikasi internasional
+                </span>
+              </div>
+            </div>
+
+            <div className="lg:col-span-5">
+              <div
+                className="animate-rise relative mx-auto max-w-md lg:max-w-none"
+                style={{ animationDelay: "220ms" }}
+              >
+                <div className="relative overflow-hidden rounded-[2rem] border border-line bg-cream p-2.5 shadow-[0_45px_90px_-55px_rgba(18,18,16,0.55)]">
+                  <div className="grain grain-light relative overflow-hidden rounded-[1.6rem] bg-ink bg-blueprint-dark p-6 text-bone sm:p-8">
+                    <div className="relative z-10">
+                      <div className="flex items-center justify-between font-mono text-[9px] uppercase tracking-[0.28em] text-bone/40">
+                        <span>NTS / Engineering</span>
+                        <span>Est. 2018</span>
+                      </div>
+
+                      <div className="mt-12">
+                        <p className="font-serif text-6xl italic leading-none text-ember sm:text-7xl">
+                          99.2%
+                        </p>
+                        <p className="mt-2 text-sm text-bone/60">
+                          Tingkat kepuasan klien
+                        </p>
+                      </div>
+
+                      <div className="mt-10 grid grid-cols-2 gap-3">
+                        <div className="rounded-xl border border-bone/10 bg-bone/[0.04] p-4">
+                          <p className="font-serif text-2xl italic leading-none">
+                            120+
+                          </p>
+                          <p className="mt-2 font-mono text-[9px] uppercase tracking-[0.18em] text-bone/40">
+                            Proyek selesai
+                          </p>
+                        </div>
+                        <div className="rounded-xl border border-bone/10 bg-bone/[0.04] p-4">
+                          <p className="font-serif text-2xl italic leading-none">
+                            45+
+                          </p>
+                          <p className="mt-2 font-mono text-[9px] uppercase tracking-[0.18em] text-bone/40">
+                            Klien aktif
+                          </p>
+                        </div>
+                        <div className="col-span-2 rounded-xl border border-bone/10 bg-bone/[0.04] p-4">
+                          <div className="flex items-center justify-between text-[11px] text-bone/50">
+                            <span>Uptime infrastruktur</span>
+                            <span className="font-mono text-bone">99.99%</span>
+                          </div>
+                          <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-bone/10">
+                            <div className="h-full w-[99%] rounded-full bg-gradient-to-r from-ember to-amber-300" />
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="mt-8 flex items-center justify-between border-t border-bone/10 pt-4 font-mono text-[9px] uppercase tracking-[0.2em] text-bone/35">
+                        <span>Jakarta, Indonesia</span>
+                        <span>6°12′S · 106°49′E</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="animate-float absolute -left-5 bottom-10 hidden items-center gap-3 rounded-2xl border border-line bg-cream px-4 py-3 shadow-[0_25px_50px_-30px_rgba(18,18,16,0.5)] sm:flex">
+                  <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-ember text-ink">
+                    <Award className="h-4 w-4" />
+                  </span>
+                  <div>
+                    <p className="text-xs font-semibold text-ink">
+                      Top Software House
+                    </p>
+                    <p className="mt-0.5 text-[10px] text-muted">
+                      Jakarta · 2024
+                    </p>
+                  </div>
+                </div>
+
+                <div className="absolute -right-3 top-8 hidden rotate-3 rounded-full border border-line bg-bone px-4 py-2 font-mono text-[9px] uppercase tracking-[0.2em] text-muted shadow-sm sm:block">
+                  ISO-aligned process
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 2. STATS */}
+      <section className="border-y border-line bg-cream/60">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <StatsStrip stats={companyData.stats} />
+        </div>
+      </section>
+
+      {/* 3. CLIENT MARQUEE */}
+      <section className="border-b border-line py-10">
+        <div className="mx-auto flex max-w-7xl flex-col gap-6 px-4 sm:px-6 lg:flex-row lg:items-center lg:gap-14 lg:px-8">
+          <p className="shrink-0 font-mono text-[10px] uppercase leading-relaxed tracking-[0.24em] text-muted lg:max-w-[11rem]">
+            Dipercaya oleh perusahaan & institusi
+          </p>
+          <Marquee items={clients} className="flex-1" />
+        </div>
+      </section>
+
+      {/* 4. ABOUT TEASER */}
+      <section className="py-20 sm:py-28">
+        <div className="mx-auto grid max-w-7xl gap-14 px-4 sm:px-6 lg:grid-cols-12 lg:gap-10 lg:px-8">
+          <Reveal className="lg:col-span-5">
+            <div className="relative overflow-hidden rounded-[2rem] border border-line bg-cream bg-blueprint">
+              <div className="flex min-h-[26rem] flex-col justify-between p-8 sm:p-10">
+                <div className="flex items-center justify-between font-mono text-[10px] uppercase tracking-[0.22em] text-muted">
+                  <span>Blueprint / 002</span>
+                  <span>Since {companyData.establishedYear}</span>
+                </div>
+
+                <div className="relative flex h-48 items-center justify-center">
+                  <div className="absolute h-40 w-40 rounded-full border border-ink/10" />
+                  <div className="absolute h-28 w-28 rounded-full border border-ink/15" />
+                  <div className="absolute h-24 w-24 rounded-full bg-ember/15 blur-xl" />
+                  <span className="relative font-serif text-6xl italic leading-none text-ink">
+                    n
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-2 gap-4 border-t border-line pt-6">
+                  <div>
+                    <p className="font-mono text-[9px] uppercase tracking-[0.2em] text-muted">
+                      Fokus
+                    </p>
+                    <p className="mt-1.5 text-sm font-medium text-ink">
+                      Enterprise software
+                    </p>
+                  </div>
+                  <div>
+                    <p className="font-mono text-[9px] uppercase tracking-[0.2em] text-muted">
+                      Basis
+                    </p>
+                    <p className="mt-1.5 text-sm font-medium text-ink">
+                      Jakarta, Indonesia
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </Reveal>
+
+          <div className="lg:col-span-7">
+            <Reveal>
+              <SectionHeading
+                centered={false}
+                index="01"
+                badge="Tentang kami"
+                title={
+                  <>
+                    Bukan sekadar vendor.{" "}
+                    <span className="font-serif font-normal italic text-ember-ink">
+                      Mitra
+                    </span>{" "}
+                    pertumbuhan Anda.
+                  </>
+                }
+                subtitle={companyData.fullBio}
+              />
+            </Reveal>
+
+            <Reveal delay={100}>
+              <div className="mt-10 divide-y divide-line border-y border-line">
+                {principles.map((item, index) => {
+                  const Icon = item.icon;
+                  return (
+                    <div key={item.title} className="group flex gap-5 py-6">
+                      <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-line bg-cream text-ink transition-colors duration-300 group-hover:border-ember group-hover:bg-ember">
+                        <Icon className="h-4 w-4" />
+                      </span>
+                      <div className="flex-1">
+                        <h3 className="text-base font-semibold text-ink">
+                          <span className="mr-2 font-mono text-[10px] text-ember-ink">
+                            0{index + 1}
+                          </span>
+                          {item.title}
+                        </h3>
+                        <p className="mt-1.5 text-sm leading-relaxed text-muted">
+                          {item.description}
+                        </p>
+                      </div>
+                      <ArrowUpRight className="mt-1 h-4 w-4 shrink-0 text-line transition-all duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-ember-ink" />
+                    </div>
+                  );
+                })}
+              </div>
+            </Reveal>
+
+            <Reveal delay={160}>
+              <Button
+                href="/about"
+                variant="ghost"
+                arrow
+                className="mt-8 text-sm"
+              >
+                Kenali kami lebih dekat
+              </Button>
+            </Reveal>
+          </div>
+        </div>
+      </section>
+
+      {/* 5. SERVICES */}
+      <section className="border-y border-line bg-bone-deep/35 py-20 sm:py-28">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
+            <Reveal>
+              <SectionHeading
+                centered={false}
+                index="02"
+                badge="Layanan"
+                title={
+                  <>
+                    Kapabilitas yang{" "}
+                    <span className="font-serif font-normal italic text-ember-ink">
+                      lengkap
+                    </span>
+                    , eksekusi presisi.
+                  </>
+                }
+                subtitle="Dari arsitektur aplikasi web modern hingga integrasi data cerdas, kami menghadirkan kapabilitas teknologi terpadu."
+              />
+            </Reveal>
+            <Reveal delay={100}>
+              <Button href="/services" variant="outline" arrow>
+                Lihat semua layanan
+              </Button>
+            </Reveal>
+          </div>
+
+          <div className="mt-14 border-t border-line">
+            {featuredServices.map((service, index) => (
+              <Reveal key={service.id} delay={index * 70}>
+                <Link
+                  href={`/services/${service.slug}`}
+                  className="group -mx-4 flex items-center gap-5 border-b border-line px-4 py-6 transition-colors duration-300 hover:bg-ink sm:-mx-6 sm:gap-8 sm:px-6 sm:py-8"
+                >
+                  <span className="font-mono text-[10px] text-muted transition-colors duration-300 group-hover:text-ember">
+                    {String(index + 1).padStart(2, "0")}
+                  </span>
+                  <div className="flex-1">
+                    <p className="font-mono text-[9px] uppercase tracking-[0.22em] text-muted transition-colors duration-300 group-hover:text-bone/40">
+                      {service.category}
+                    </p>
+                    <h3 className="mt-1.5 text-xl font-semibold tracking-tight text-ink transition-colors duration-300 group-hover:text-bone sm:text-2xl">
+                      {service.title}
+                    </h3>
+                    <p className="mt-2 line-clamp-2 max-w-2xl text-sm leading-relaxed text-muted transition-colors duration-300 group-hover:text-bone/50">
+                      {service.shortDesc}
+                    </p>
+                  </div>
+                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-line text-ink transition-all duration-300 group-hover:border-ember group-hover:bg-ember group-hover:text-ink">
+                    <ArrowUpRight className="h-4 w-4" />
+                  </span>
+                </Link>
+              </Reveal>
             ))}
           </div>
         </div>
       </section>
 
-      {/* 7. TESTIMONIALS */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <SectionHeading
-          badge="Testimoni"
-          title="Diakui & Dipercaya oleh Pemimpin Industri"
-          subtitle="Apa kata klien kami tentang pengalaman bekerja sama dengan tim Nusantara Tekno Solusi."
-        />
+      {/* 6. FEATURED WORK */}
+      <section className="py-20 sm:py-28">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <Reveal>
+            <SectionHeading
+              index="03"
+              badge="Karya terpilih"
+              title={
+                <>
+                  Hasil nyata yang{" "}
+                  <span className="font-serif font-normal italic text-ember-ink">
+                    menggerakkan
+                  </span>{" "}
+                  bisnis klien.
+                </>
+              }
+              subtitle="Pelajari bagaimana kami memecahkan masalah arsitektur kompleks dan meluncurkan produk digital bernilai tinggi."
+            />
+          </Reveal>
 
-        <div className="mt-12 grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
-          {testimonialsData.map((test) => (
-            <div
-              key={test.id}
-              className="bg-white rounded-2xl p-6 sm:p-8 border border-slate-200/80 shadow-sm flex flex-col justify-between"
-            >
-              <div>
-                {/* Rating stars */}
-                <div className="flex items-center gap-1 text-amber-400 mb-4">
-                  {[...Array(test.rating)].map((_, i) => (
-                    <Star key={i} className="w-4 h-4 fill-amber-400" />
-                  ))}
-                </div>
-
-                {/* Quote */}
-                <p className="text-sm sm:text-base text-slate-700 leading-relaxed italic">
-                  &ldquo;{test.quote}&rdquo;
-                </p>
-              </div>
-
-              {/* Author */}
-              <div className="mt-6 pt-6 border-t border-slate-100 flex items-center gap-3.5">
-                <div className="w-11 h-11 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-600 text-white font-bold text-sm flex items-center justify-center shrink-0">
-                  {test.avatarInitials}
-                </div>
-                <div>
-                  <h4 className="text-sm font-bold text-slate-900">
-                    {test.author}
-                  </h4>
-                  <p className="text-xs text-slate-500">
-                    {test.role} — <span className="text-slate-700 font-medium">{test.company}</span>
-                  </p>
-                </div>
-              </div>
+          <Reveal delay={80}>
+            <div className="mt-14 grid gap-5 md:grid-cols-2">
+              {featuredProjects.map((project, index) => (
+                <PortfolioCard
+                  key={project.id}
+                  project={project}
+                  featured={index === 0}
+                />
+              ))}
             </div>
-          ))}
+          </Reveal>
+
+          <div className="mt-12 text-center">
+            <Button href="/portfolio" variant="outline" arrow>
+              Lihat semua proyek & studi kasus
+            </Button>
+          </div>
         </div>
       </section>
 
-      {/* 8. GLOBAL CTA BANNER */}
-      <CtaBanner />
+      {/* 7. PROCESS */}
+      <section className="grain grain-light relative overflow-hidden bg-ink py-20 text-bone sm:py-28">
+        <div className="absolute inset-0 bg-blueprint-dark opacity-50" />
+        <div className="relative mx-auto grid max-w-7xl gap-14 px-4 sm:px-6 lg:grid-cols-12 lg:gap-10 lg:px-8">
+          <div className="lg:col-span-5">
+            <div className="lg:sticky lg:top-32">
+              <Reveal>
+                <SectionHeading
+                  dark
+                  centered={false}
+                  index="04"
+                  badge="Cara kami bekerja"
+                  title={
+                    <>
+                      Proses transparan,{" "}
+                      <span className="font-serif font-normal italic text-ember">
+                        hasil nyata
+                      </span>
+                      .
+                    </>
+                  }
+                  subtitle="Pendekatan terstruktur demi memastikan hasil akhir sesuai ekspektasi, tepat waktu."
+                />
+                <p className="mt-8 border-l-2 border-ember pl-5 font-serif text-xl italic leading-relaxed text-bone/45">
+                  “Riset dulu, baru bangun. Tidak ada kejutan di tengah jalan.”
+                </p>
+              </Reveal>
+            </div>
+          </div>
+
+          <div className="lg:col-span-7">
+            <div className="divide-y divide-bone/10 border-y border-bone/10">
+              {workSteps.map((step, index) => (
+                <Reveal key={step.title} delay={index * 70}>
+                  <div className="group flex gap-5 py-7 sm:gap-7">
+                    <span className="pt-1.5 font-mono text-[10px] text-ember">
+                      {String(index + 1).padStart(2, "0")}
+                    </span>
+                    <div>
+                      <h3 className="text-lg font-semibold transition-colors duration-300 group-hover:text-ember sm:text-xl">
+                        {step.title}
+                      </h3>
+                      <p className="mt-2 text-sm leading-relaxed text-bone/45">
+                        {step.desc}
+                      </p>
+                    </div>
+                  </div>
+                </Reveal>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 8. TESTIMONIALS */}
+      <section className="py-20 sm:py-28">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <Reveal>
+            <SectionHeading
+              index="05"
+              badge="Testimoni"
+              title={
+                <>
+                  Dipercaya oleh{" "}
+                  <span className="font-serif font-normal italic text-ember-ink">
+                    para pemimpin
+                  </span>{" "}
+                  industri.
+                </>
+              }
+              subtitle="Apa kata klien tentang pengalaman bekerja sama dengan tim kami."
+            />
+          </Reveal>
+
+          <div className="mt-14 grid gap-5 lg:grid-cols-12">
+            {featuredTestimonial && (
+              <Reveal className="lg:col-span-7">
+                <figure className="grain grain-light relative flex h-full flex-col justify-between overflow-hidden rounded-2xl bg-ink p-8 text-bone sm:p-10">
+                  <div className="absolute -right-16 -top-16 h-52 w-52 rounded-full border border-bone/10" />
+                  <Quote className="relative z-10 h-8 w-8 text-ember" />
+                  <blockquote className="relative z-10 mt-8 font-serif text-2xl italic leading-snug sm:text-3xl">
+                    “{featuredTestimonial.quote}”
+                  </blockquote>
+                  <figcaption className="relative z-10 mt-8 flex items-center gap-4 border-t border-bone/10 pt-6">
+                    <span className="flex h-11 w-11 items-center justify-center rounded-full bg-ember font-mono text-xs font-bold text-ink">
+                      {featuredTestimonial.avatarInitials}
+                    </span>
+                    <div>
+                      <p className="text-sm font-semibold">
+                        {featuredTestimonial.author}
+                      </p>
+                      <p className="mt-0.5 text-xs text-bone/45">
+                        {featuredTestimonial.role} —{" "}
+                        {featuredTestimonial.company}
+                      </p>
+                    </div>
+                  </figcaption>
+                </figure>
+              </Reveal>
+            )}
+
+            <div className="space-y-5 lg:col-span-5">
+              {otherTestimonials.slice(0, 2).map((testimonial, index) => (
+                <Reveal key={testimonial.id} delay={index * 90}>
+                  <figure className="flex h-full flex-col justify-between rounded-2xl border border-line bg-cream p-6 sm:p-7">
+                    <div>
+                      <div className="flex items-center gap-1">
+                        {Array.from({ length: testimonial.rating }).map(
+                          (_, starIndex) => (
+                            <Star
+                              key={starIndex}
+                              className="h-3.5 w-3.5 fill-ember text-ember"
+                            />
+                          )
+                        )}
+                      </div>
+                      <blockquote className="mt-4 text-sm leading-relaxed text-ink/75">
+                        “{testimonial.quote}”
+                      </blockquote>
+                    </div>
+                    <figcaption className="mt-5 flex items-center gap-3 border-t border-line pt-4">
+                      <span className="flex h-9 w-9 items-center justify-center rounded-full border border-line font-mono text-[10px] font-bold text-ink">
+                        {testimonial.avatarInitials}
+                      </span>
+                      <div>
+                        <p className="text-xs font-semibold text-ink">
+                          {testimonial.author}
+                        </p>
+                        <p className="mt-0.5 text-[10px] text-muted">
+                          {testimonial.role} — {testimonial.company}
+                        </p>
+                      </div>
+                    </figcaption>
+                  </figure>
+                </Reveal>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 9. CTA */}
+      <CtaBanner
+        title="Siap mentransformasi bisnis Anda dengan teknologi andal?"
+        description="Diskusikan tantangan digital perusahaan Anda bersama tim arsitek teknologi kami. Konsultasi awal gratis, tanpa komitmen."
+      />
     </div>
   );
 }

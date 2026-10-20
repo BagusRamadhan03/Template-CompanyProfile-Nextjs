@@ -1,95 +1,100 @@
 import Link from "next/link";
-import { ServiceDetail } from "@/lib/data/services";
 import {
-  Globe,
-  Smartphone,
-  Cloud,
+  ArrowUpRight,
   BarChart3,
+  Cloud,
+  Globe,
   Palette,
   Shield,
-  ArrowRight,
-  CheckCircle2,
+  Smartphone,
   Sparkles,
 } from "lucide-react";
+import { ServiceDetail } from "@/lib/data/services";
 
 interface ServiceCardProps {
   service: ServiceDetail;
+  index?: number;
 }
 
-export function ServiceCard({ service }: ServiceCardProps) {
-  const renderIcon = (iconName: string) => {
-    const props = { className: "w-6 h-6 text-blue-600" };
-    switch (iconName) {
-      case "Smartphone":
-        return <Smartphone {...props} />;
-      case "Cloud":
-        return <Cloud {...props} />;
-      case "BarChart3":
-        return <BarChart3 {...props} />;
-      case "Palette":
-        return <Palette {...props} />;
-      case "Shield":
-        return <Shield {...props} />;
-      case "Globe":
-      default:
-        return <Globe {...props} />;
-    }
-  };
+interface ServiceIconProps {
+  name: string;
+  className?: string;
+}
 
+export function ServiceIcon({ name, className }: ServiceIconProps) {
+  const props = { className };
+  switch (name) {
+    case "Smartphone":
+      return <Smartphone {...props} />;
+    case "Cloud":
+      return <Cloud {...props} />;
+    case "BarChart3":
+      return <BarChart3 {...props} />;
+    case "Palette":
+      return <Palette {...props} />;
+    case "Shield":
+      return <Shield {...props} />;
+    case "Globe":
+    default:
+      return <Globe {...props} />;
+  }
+}
+
+export function ServiceCard({ service, index = 0 }: ServiceCardProps) {
   return (
-    <div className="group relative bg-white rounded-2xl p-6 sm:p-8 border border-slate-200/80 shadow-sm hover:shadow-xl hover:border-blue-300/80 transition-all duration-300 flex flex-col justify-between">
+    <Link
+      id={service.slug}
+      href={`/services/${service.slug}`}
+      className="group relative flex h-full scroll-mt-32 flex-col justify-between overflow-hidden rounded-2xl border border-line bg-cream p-6 transition-all duration-500 hover:-translate-y-1 hover:border-ink/25 hover:shadow-[0_30px_60px_-40px_rgba(18,18,16,0.45)] sm:p-8"
+    >
       {service.popular && (
-        <div className="absolute -top-3 right-6 bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-xs font-semibold px-3 py-0.5 rounded-full shadow-md flex items-center gap-1">
-          <Sparkles className="w-3 h-3" />
-          <span>Populer</span>
-        </div>
+        <span className="absolute right-0 top-0 flex items-center gap-1 rounded-bl-xl bg-ember px-3 py-1.5 font-mono text-[9px] font-semibold uppercase tracking-[0.14em] text-ink">
+          <Sparkles className="h-3 w-3" />
+          Populer
+        </span>
       )}
 
       <div>
-        {/* Icon & Category */}
-        <div className="flex items-center justify-between gap-4 mb-5">
-          <div className="w-12 h-12 rounded-xl bg-blue-50 border border-blue-100 flex items-center justify-center group-hover:bg-blue-600 group-hover:text-white transition-colors duration-300 [&>svg]:group-hover:text-white">
-            {renderIcon(service.icon)}
-          </div>
-          <span className="text-xs font-medium text-slate-500 bg-slate-100 px-2.5 py-1 rounded-md">
-            {service.category}
+        <div className="flex items-start justify-between">
+          <span className="flex h-12 w-12 items-center justify-center rounded-xl border border-line bg-bone text-ink transition-colors duration-300 group-hover:border-ember group-hover:bg-ember">
+            <ServiceIcon name={service.icon} className="h-5 w-5" />
+          </span>
+          <span className="font-mono text-[10px] tracking-[0.2em] text-muted">
+            {String(index + 1).padStart(2, "0")}
           </span>
         </div>
 
-        {/* Title & Short Description */}
-        <h3 className="text-xl font-bold text-slate-900 group-hover:text-blue-600 transition-colors">
-          <Link href={`/services/${service.slug}`} className="focus:outline-none">
-            {service.title}
-          </Link>
+        <p className="mt-8 font-mono text-[10px] uppercase tracking-[0.24em] text-muted">
+          {service.category}
+        </p>
+        <h3 className="mt-2 text-xl font-semibold tracking-tight text-ink transition-colors duration-300 group-hover:text-ember-ink">
+          {service.title}
         </h3>
-        <p className="mt-2.5 text-sm text-slate-600 leading-relaxed">
+        <p className="mt-3 text-sm leading-relaxed text-muted">
           {service.shortDesc}
         </p>
 
-        {/* Highlight points */}
-        <ul className="mt-5 space-y-2 text-xs text-slate-600">
-          {service.highlightPoints.slice(0, 3).map((pt, idx) => (
-            <li key={idx} className="flex items-start gap-2">
-              <CheckCircle2 className="w-4 h-4 text-blue-500 shrink-0 mt-0.5" />
-              <span>{pt}</span>
+        <ul className="mt-5 space-y-2.5">
+          {service.highlightPoints.slice(0, 3).map((point) => (
+            <li
+              key={point}
+              className="flex items-start gap-2.5 text-xs leading-relaxed text-ink/65"
+            >
+              <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-ember" />
+              <span>{point}</span>
             </li>
           ))}
         </ul>
       </div>
 
-      {/* Footer Link */}
-      <div className="mt-6 pt-5 border-t border-slate-100 flex items-center justify-between">
-        <span className="text-xs text-slate-400 font-medium">
-          Estimasi: {service.estimatedDuration}
+      <div className="mt-8 flex items-center justify-between border-t border-line pt-5">
+        <span className="text-[11px] text-muted">
+          Estimasi {service.estimatedDuration}
         </span>
-        <Link
-          href={`/services/${service.slug}`}
-          className="inline-flex items-center gap-1.5 text-sm font-semibold text-blue-600 group-hover:text-blue-700 group-hover:translate-x-0.5 transition-all"
-        >
-          <span>Detail Layanan</span>
-          <ArrowRight className="w-4 h-4" />
-        </Link>
+        <span className="flex h-9 w-9 items-center justify-center rounded-full border border-line text-ink transition-all duration-300 group-hover:border-ink group-hover:bg-ink group-hover:text-bone">
+          <ArrowUpRight className="h-4 w-4" />
+        </span>
       </div>
-    </div>
+    </Link>
   );
 }

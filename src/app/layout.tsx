@@ -1,16 +1,30 @@
-import type { Metadata } from "next";
-import { Plus_Jakarta_Sans } from "next/font/google";
+import type { Metadata, Viewport } from "next";
+import { Instrument_Serif, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { WhatsAppButton } from "@/components/WhatsAppButton";
+import { Cursor } from "@/components/Cursor";
+import { ScrollProgress } from "@/components/ScrollProgress";
 import { companyData } from "@/lib/data/company";
 
 const jakartaSans = Plus_Jakarta_Sans({
   subsets: ["latin"],
-  variable: "--font-sans",
+  variable: "--font-jakarta",
   display: "swap",
 });
+
+const instrumentSerif = Instrument_Serif({
+  subsets: ["latin"],
+  weight: "400",
+  style: ["normal", "italic"],
+  variable: "--font-instrument",
+  display: "swap",
+});
+
+export const viewport: Viewport = {
+  themeColor: "#f4f0e8",
+};
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://nusantaratekno.co.id"),
@@ -89,18 +103,35 @@ export default function RootLayout({
   };
 
   return (
-    <html lang="id" className={`${jakartaSans.variable} font-sans`}>
+    <html
+      lang="id"
+      id="top"
+      className={`${jakartaSans.variable} ${instrumentSerif.variable} font-sans`}
+    >
       <head>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
+        <noscript>
+          <style>{`.reveal{opacity:1;transform:none}`}</style>
+        </noscript>
       </head>
-      <body className="flex flex-col min-h-screen bg-slate-50 text-slate-900 antialiased selection:bg-blue-600 selection:text-white">
+      <body className="flex min-h-screen flex-col bg-bone text-ink antialiased">
+        <ScrollProgress />
+        <a
+          href="#main"
+          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-full focus:bg-ink focus:px-5 focus:py-3 focus:text-sm focus:font-semibold focus:text-bone"
+        >
+          Lewati ke konten utama
+        </a>
         <Navbar />
-        <main className="flex-grow pt-20">{children}</main>
+        <main id="main" className="flex-grow">
+          {children}
+        </main>
         <Footer />
         <WhatsAppButton />
+        <Cursor />
       </body>
     </html>
   );

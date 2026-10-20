@@ -34,7 +34,7 @@ export const portfolioData: PortfolioProject[] = [
     category: "Mobile Apps",
     year: "2024",
     featured: true,
-    coverGradient: "from-blue-600 via-indigo-600 to-cyan-500",
+    coverGradient: "from-[#141312] via-[#3b2417] to-[#ff4d1f]",
     shortSummary:
       "Modernisasi antarmuka mobile banking dengan sistem autentikasi biometrik mutakhir, transfer instan BI-FAST, dan performa transaksi waktu nyata.",
     challenge:
@@ -64,7 +64,7 @@ export const portfolioData: PortfolioProject[] = [
     category: "Web Platform",
     year: "2024",
     featured: true,
-    coverGradient: "from-emerald-600 via-teal-600 to-cyan-600",
+    coverGradient: "from-[#0f211d] via-[#1b4239] to-[#63c9a8]",
     shortSummary:
       "Platform pemantauan armada logistik real-time dengan telematika IoT, optimasi rute otomatis, dan estimasi waktu ketibaan presisi tinggi.",
     challenge:
@@ -94,7 +94,7 @@ export const portfolioData: PortfolioProject[] = [
     category: "Web Platform",
     year: "2023",
     featured: true,
-    coverGradient: "from-sky-600 via-blue-700 to-indigo-800",
+    coverGradient: "from-[#131a26] via-[#25405f] to-[#f0b49b]",
     shortSummary:
       "Ekosistem konsultasi dokter online terenkripsi, resep obat digital terhubung apotek rekanan, dan integrasi rekam medis elektronik (RME).",
     challenge:
@@ -118,7 +118,7 @@ export const portfolioData: PortfolioProject[] = [
     category: "Cloud & DevOps",
     year: "2023",
     featured: false,
-    coverGradient: "from-amber-500 via-orange-600 to-rose-600",
+    coverGradient: "from-[#241a10] via-[#5a3a1f] to-[#f2b04a]",
     shortSummary:
       "Sistem kasir cerdas point-of-sale berbasis cloud dengan sinkronisasi inventaris multi-outlet real-time dan analitik penjualan prediktif.",
     challenge:
@@ -141,7 +141,7 @@ export const portfolioData: PortfolioProject[] = [
     category: "Data & AI",
     year: "2023",
     featured: false,
-    coverGradient: "from-violet-600 via-purple-700 to-indigo-900",
+    coverGradient: "from-[#1a1526] via-[#3a2f5f] to-[#b7a4f2]",
     shortSummary:
       "Portal pelayanan publik terpadu dan sistem agregasi laporan aspirasi warga dengan klasifikasi cerdas menggunakan NLP.",
     challenge:
@@ -164,7 +164,7 @@ export const portfolioData: PortfolioProject[] = [
     category: "Web Platform",
     year: "2024",
     featured: false,
-    coverGradient: "from-rose-500 via-pink-600 to-purple-600",
+    coverGradient: "from-[#26121a] via-[#5f2438] to-[#ff8a9b]",
     shortSummary:
       "Platform belajar interaktif dengan penyesuaian kurikulum adaptif berdasarkan kecepatan belajar dan pemahaman masing-masing siswa.",
     challenge:
