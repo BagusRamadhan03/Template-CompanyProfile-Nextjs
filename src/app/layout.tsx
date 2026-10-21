@@ -27,7 +27,7 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://nusantaratekno.co.id"),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://nusantaratekno.co.id"),
   title: {
     default: `${companyData.name} — ${companyData.tagline}`,
     template: `%s | ${companyData.shortName}`,
